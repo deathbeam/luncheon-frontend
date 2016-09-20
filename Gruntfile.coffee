@@ -1,21 +1,41 @@
 module.exports = (grunt) ->
   grunt.initConfig
-    bower:
-      install:
-        options:
-          targetDir: "public/vendor"
     connect:
       app:
         options:
+          livereload: true,
           base: "public/",
-          port: 9000,
-          keepalive: true
+          port: 9000
     copy:
-      css:
+      resources:
         expand: true,
-        cwd: 'src/css',
-        src: '**/*.css',
-        dest: 'public/css/'
+        cwd: 'src/resources',
+        src: '**/*',
+        dest: 'public/'
+    pug:
+      src:
+        options:
+          pretty: true
+        files: [
+          {
+            expand: true,
+            cwd: 'src/pug',
+            src: '**/*.pug',
+            dest: 'public/',
+            ext: '.html'
+          }
+        ]
+    stylus:
+      src:
+        files: [
+          {
+            expand: true,
+            cwd: 'src/stylus',
+            src: '**/*.styl',
+            dest: 'public/css/',
+            ext: '.css'
+          }
+        ]
     coffee:
       src:
         files: [
@@ -27,20 +47,23 @@ module.exports = (grunt) ->
             ext: '.js'
           }
         ]
-    mustache_render:
-      luncheon:
-        files: [
-          {
-            template: 'src/templates/luncheon.mustache.html',
-            data: 'src/data/luncheon.json',
-            dest: 'public/luncheon.html'
-          }
-        ]
+    watch:
+      pug:
+        files: 'src/pug/**/*.pug'
+        tasks: 'pug:src'
+      stylus:
+        files: 'src/stylus/**/*.styl'
+        tasks: 'stylus:src'
+      coffee:
+        files: 'src/coffee/**/*.coffee'
+        tasks: 'coffee:src'
 
-  grunt.loadNpmTasks 'grunt-bower-task'
+  grunt.loadNpmTasks 'grunt-contrib-pug'
+  grunt.loadNpmTasks 'grunt-contrib-stylus'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-connect'
-  grunt.loadNpmTasks 'grunt-contrib-copy'
-  grunt.loadNpmTasks 'grunt-mustache-render'
+  grunt.loadNpmTasks 'grunt-contrib-watch'
 
-  grunt.registerTask 'default', ['bower', 'copy', 'coffee', 'mustache_render']
+  grunt.registerTask 'build', ['pug', 'stylus', 'coffee']
+  grunt.registerTask 'serve', ['build', 'connect', 'watch']
+  grunt.registerTask 'default', 'build'

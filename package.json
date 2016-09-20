@@ -6,10 +6,11 @@
 	"devDependencies": {
 		"grunt": "",
         "bower": "",
-        "grunt-bower-task": "",
+		"grunt-contrib-pug": "",
+		"grunt-contrib-stylus": "",
 		"grunt-contrib-coffee": "",
 		"grunt-contrib-connect": "",
         "grunt-contrib-copy": "",
-        "grunt-mustache-render": ""
+		"grunt-contrib-watch": ""
 	}
 }

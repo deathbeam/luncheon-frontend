@@ -18,21 +18,6 @@
   ],
   "dependencies": {
     "bootstrap": "",
-    "bootstrap-calendar": ""
-  },
-  "exportsOverride": {
-    "bootstrap": {
-      "/": [
-        "dist/js/bootstrap.js",
-        "dist/css/bootstrap.css"
-      ]
-    },
-    "bootstrap-calendar": {
-      "/": [
-        "js/calendar.js",
-        "css/calendar.css",
-        "tmpls/*.html"
-      ]
-    }
+    "font-awesome": ""
   }
 }
