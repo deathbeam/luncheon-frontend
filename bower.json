@@ -1,0 +1,38 @@
+{
+  "name": "luncheon-frontend",
+  "homepage": "https://github.com/deathbeam/luncheon-frontend",
+  "authors": [
+    "Tomas Slusny <slusnucky@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "dist"
+  ],
+  "dependencies": {
+    "bootstrap": "",
+    "bootstrap-calendar": ""
+  },
+  "exportsOverride": {
+    "bootstrap": {
+      "/": [
+        "dist/js/bootstrap.js",
+        "dist/css/bootstrap.css"
+      ]
+    },
+    "bootstrap-calendar": {
+      "/": [
+        "js/calendar.js",
+        "css/calendar.css",
+        "tmpls/*.html"
+      ]
+    }
+  }
+}
