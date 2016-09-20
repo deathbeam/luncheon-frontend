@@ -27,6 +27,8 @@ module.exports = (grunt) ->
         ]
     stylus:
       src:
+        options:
+          compress: false
         files: [
           {
             expand: true,
