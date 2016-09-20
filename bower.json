@@ -18,6 +18,7 @@
   ],
   "dependencies": {
     "bootstrap": "",
-    "font-awesome": ""
+    "font-awesome": "",
+    "angular": ""
   }
 }

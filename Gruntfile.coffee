@@ -12,28 +12,20 @@ module.exports = (grunt) ->
         cwd: 'src/resources',
         src: '**/*',
         dest: 'public/'
-    pug:
       src:
-        options:
-          pretty: true
-        files: [
-          {
-            expand: true,
-            cwd: 'src/pug',
-            src: '**/*.pug',
-            dest: 'public/',
-            ext: '.html'
-          }
-        ]
-    stylus:
+        expand: true,
+        cwd: 'src/',
+        src: '**/*.html',
+        dest: 'public/'
+    less:
       src:
         options:
           compress: false
         files: [
           {
             expand: true,
-            cwd: 'src/stylus',
-            src: '**/*.styl',
+            cwd: 'src/less',
+            src: '**/*.less',
             dest: 'public/css/',
             ext: '.css'
           }
@@ -50,22 +42,22 @@ module.exports = (grunt) ->
           }
         ]
     watch:
-      pug:
-        files: 'src/pug/**/*.pug'
-        tasks: 'pug:src'
-      stylus:
-        files: 'src/stylus/**/*.styl'
-        tasks: 'stylus:src'
+      html:
+        files: 'src/**/*.html'
+        tasks: 'copy:src'
+      less:
+        files: 'src/less/**/*.less'
+        tasks: 'less:src'
       coffee:
         files: 'src/coffee/**/*.coffee'
         tasks: 'coffee:src'
-
-  grunt.loadNpmTasks 'grunt-contrib-pug'
-  grunt.loadNpmTasks 'grunt-contrib-stylus'
+  
+  grunt.loadNpmTasks 'grunt-contrib-less'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
-  grunt.loadNpmTasks 'grunt-contrib-connect'
+  grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-watch'
+  grunt.loadNpmTasks 'grunt-contrib-connect'
 
-  grunt.registerTask 'build', ['pug', 'stylus', 'coffee']
+  grunt.registerTask 'build', ['copy', 'less', 'coffee']
   grunt.registerTask 'serve', ['build', 'connect', 'watch']
   grunt.registerTask 'default', 'build'
