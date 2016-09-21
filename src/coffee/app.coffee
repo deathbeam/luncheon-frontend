@@ -1,4 +1,7 @@
+# This function is ran after window is fully loaded
 $ ->
-  $('[data-toggle="tooltip"]').tooltip placement: "right"
+  # Load Bootstrap tooltips
+  $('[data-toggle="tooltip"]').tooltip placement: "bottom"
 
+# Create main Angular module
 angular.module "luncheon", []

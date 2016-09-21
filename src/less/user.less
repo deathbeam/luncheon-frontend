@@ -1,8 +1,8 @@
-@color_1: #fff;
+@event-color: #fff;
 @color_2: #1e1e1e;
 @color_3: #4b6ea8;
 @color_4: #287525;
-@font-family_1: 'Lato', sans-serif;
+@font-family: 'Lato', sans-serif;
 
 @import "http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,400italic";
 
@@ -13,39 +13,37 @@ body {
 
 .event-list {
     list-style: none;
-    font-family: @font-family_1;
+    font-family: @font-family;
     margin: 0px;
     padding: 0px;
+
     >li {
-        background-color: #fff;
+        background-color: @event-color;
         box-shadow: 0px 0px 5px #333;
         box-shadow: 0px 0px 5px rgba(51,51,51,0.7);
         padding: 0px;
         margin: 0px 0px 20px;
+
         >time {
             display: inline-block;
             width: 100%;
-            color: @color_1;
+            color: @event-color;
             background-color: #c52c66;
             padding: 5px;
             text-align: center;
             text-transform: uppercase;
+
             >span {
                 display: none;
             }
+
             >.day {
                 display: block;
                 font-size: 56pt;
                 font-weight: 100;
                 line-height: 1;
             }
-        }
-        &:nth-child(even) {
-            >time {
-                background-color: #a552a7;
-            }
-        }
-        time {
+
             >.month {
                 display: block;
                 font-size: 24pt;
@@ -53,65 +51,31 @@ body {
                 line-height: 1;
             }
         }
+
+        &:nth-child(even) {
+            >time {
+                background-color: #a552a7;
+            }
+        }
+
         >.info {
             padding-top: 5px;
             text-align: center;
+
             >.title {
                 font-size: 17pt;
                 font-weight: 700;
                 margin: 0px;
             }
+
             >.desc {
                 font-size: 13pt;
                 font-weight: 300;
                 margin: 0px;
             }
-            >ul {
-                >li {
-                    >a {
-                        display: block;
-                        width: 100%;
-                        color: @color_2;
-                        text-decoration: none;
-                    }
-                    display: table-cell;
-                    cursor: pointer;
-                    color: @color_2;
-                    font-size: 11pt;
-                    font-weight: 300;
-                    padding: 3px 0px;
-                    &:hover {
-                        color: @color_2;
-                        background-color: #c8c8c8;
-                    }
-                }
-                display: table;
-                list-style: none;
-                margin: 10px 0px 0px;
-                padding: 0px;
-                width: 100%;
-                text-align: center;
-            }
         }
-        >.details {
-            span, a {
-                display: block;
-                width: 40px;
-                width: 100%;
-                padding: 10px 0px 9px;
-            }
-            span {
-                color: @color_3 !important;
-            }
-            a {
-                cursor: pointer;
-                color: @color_4 !important;
 
-                &:hover {
-                    color: @color_1 !important;
-                    background-color: @color_4 !important;
-                }
-            }
+        >.details {
             >ul {
                 margin: 0px;
                 display: table;
@@ -119,13 +83,33 @@ body {
                 padding: 0px;
                 width: 100%;
                 text-align: center;
+
                 >li {
                     padding: 0px;
                     display: table-cell;
                     color: @color_2;
                     font-size: 11pt;
                     font-weight: 300;
-                    padding: 3px 0px;
+
+                    >span, >a {
+                        display: block;
+                        width: 100%;
+                        padding: 3px 0px;
+                    }
+
+                    >span {
+                        color: @color_3;
+                    }
+
+                    >a {
+                        cursor: pointer;
+                        color: @color_4;
+
+                        &:hover {
+                            color: @event-color;
+                            background-color: @color_4;
+                        }
+                    }
                 }
             }
         }
@@ -139,6 +123,7 @@ body {
             width: 100%;
             height: 120px;
             padding: 0px;
+
             >.info {
                 background-color: #f5f5f5;
                 overflow: hidden;
@@ -146,29 +131,39 @@ body {
                 height: 120px;
                 text-align: left;
                 padding-right: 40px;
+
                 >ul {
                     position: absolute;
                     left: 0px;
                     bottom: 0px;
                 }
+
                 >.title {
                     padding: 0px 10px;
                 }
+
                 >.desc {
                     padding: 0px 10px;
                 }
             }
+
             >.details {
                 position: absolute;
                 top: 0px;
                 right: 0px;
                 display: block;
                 width: 40px;
+
                 >ul>li {
                     display: block;
-                    padding: 0px;
+
+                    >span, >a {
+                        width: 40px;
+                        padding: 10px 0px 9px;
+                    }
                 }
             }
+
             >time {
                 display: block;
                 width: 120px;

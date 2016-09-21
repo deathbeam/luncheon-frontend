@@ -3,7 +3,7 @@ dummyLunches = [
     description: "No proste obed"
     date: "2016-04-01"
     soup: true
-    ordered: true
+    ordered: false
   ,
     description: "No proste ďalší obed"
     date: "2016-05-04"
@@ -13,7 +13,7 @@ dummyLunches = [
 
 # Convert date string to day, month and year
 parseDate = (dateString) ->
-  date = new Date Date.parse(dateString)
+  date = new Date dateString
 
   raw: dateString
   day: date.getDate()
@@ -29,15 +29,19 @@ transformLunches = (lunches) ->
     clone.date = parseDate l.date
     transformed.push clone
   
-  transformed.sort (a, b) -> new Date(a.date.raw) - new Date(b.date.raw)
+  transformed.sort (a, b) -> Date.parse(a.date.raw) - Date.parse(b.date.raw)
 
-# Create our User module
+# Create our User controller
 angular.module("luncheon").controller "User", ($scope, $http) ->
   # Load lunches
   $scope.lunches = transformLunches dummyLunches
 
-  # Convert month number to it's string representation
+  # List of months in their string representation
   $scope.months = [
     "Jan", "Feb", "Mar", "Apr", "Máj", "Jún",
     "Júl", "Aug", "Sep", "Okt", "Nov", "Dec"
     ]
+  
+  # Function that will order the lunch
+  $scope.order = (lunch) ->
+    lunch.ordered = true
