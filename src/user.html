@@ -18,14 +18,14 @@
             <div class="col-xs-12 col-sm-offset-2 col-sm-8 [ ]">
                 <ul class="event-list">
                     <li ng-repeat="lunch in lunches">
-                        <time datetime="{{lunch.date.raw}}">
-                            <span class="day">{{lunch.date.day}}</span>
-                            <span class="month">{{lunch.date.month}}</span>
-                            <span class="year">{{lunch.date.year}}</span>
+                        <time datetime="{{ lunch.date.raw }}">
+                            <span class="day">{{ lunch.date.day }}</span>
+                            <span class="month">{{ months[lunch.date.month] }}</span>
+                            <span class="year">{{ lunch.date.year }}</span>
                         </time>
                         <div class="info">
                             <h2 class="title">Obed</h2>
-                            <p class="desc">{{lunch.description}}</p>
+                            <p class="desc">{{ lunch.description }}</p>
                             <ul>
                                 <li style="width:50%"><a href="#website"><span class="fa fa-globe"></span> Website</a></li>
                                 <li style="width:50%"><span class="fa fa-money"></span> $39.99</li>
@@ -33,9 +33,6 @@
                         </div>
                         <div class="details">
                             <ul>
-                                <li class="ordered">
-                                    
-                                </li>
                                 <li class="ordered" ng-switch="lunch.ordered">
                                     <a href="#" ng-switch-when="false" data-toggle="tooltip" title="Objednať obed">
                                         <i class="fa fa-fw fa-square-o"></i>

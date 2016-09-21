@@ -1,19 +1,15 @@
-# Convert month number to it's string representation
-monthToString = (monthNum) ->
-  switch monthNum
-    when 0 then "Jan"
-    when 1 then "Feb"
-    when 2 then "Mar"
-    when 3 then "Apr"
-    when 4 then "Máj"
-    when 5 then "Jún"
-    when 6 then "Júl"
-    when 7 then "Aug"
-    when 8 then "Sep"
-    when 9 then "Okt"
-    when 10 then "Nov"
-    when 11 then "Dec"
-    else ""
+# Dummy data
+dummyLunches = [
+    description: "No proste obed"
+    date: "2016-04-01"
+    soup: true
+    ordered: true
+  ,
+    description: "No proste ďalší obed"
+    date: "2016-05-04"
+    soup: false
+    ordered: false
+  ]
 
 # Convert date string to day, month and year
 parseDate = (dateString) ->
@@ -31,14 +27,9 @@ transformLunches = (lunches) ->
   viewLunches = []
 
   for lunch in lunches
-    date = parseDate lunch.date
-    date.month = monthToString date.month
-    
-    viewLunches.push
-      date: date
-      description: lunch.description
-      soup: lunch.soup
-      ordered: lunch.ordered
+    viewLunch = lunch
+    viewLunch.date = parseDate lunch.date
+    viewLunches.push viewLunch
   
   viewLunches.sort (a, b) ->
     a = new Date a.date.raw
@@ -47,16 +38,11 @@ transformLunches = (lunches) ->
 
 # Create our User module
 angular.module("luncheon").controller "User", ($scope, $http) ->
-  lunches = [
-    description: "No proste obed"
-    date: "2016-04-01"
-    soup: true
-    ordered: true
-  ,
-    description: "No proste ďalší obed"
-    date: "2016-05-04"
-    soup: false
-    ordered: false
-  ]
+  # Load lunches
+  $scope.lunches = transformLunches dummyLunches
 
-  $scope.lunches = transformLunches lunches
+  # Convert month number to it's string representation
+  $scope.months = [
+    "Jan", "Feb", "Mar", "Apr", "Máj", "Jún",
+    "Júl", "Aug", "Sep", "Okt", "Nov", "Dec"
+    ]
