@@ -3,6 +3,11 @@ $ ->
   # Load Bootstrap tooltips
   $('[data-toggle="tooltip"]').tooltip placement: "bottom"
 
+# Get current date in correct format
+Date::yyyymmdd = () ->
+  @toISOString().substring 0, 10
+
+# Simple message logger
 window.addMessageCounter = 0
 window.addMessage = (message, level="info") ->
   addMessageCounter++

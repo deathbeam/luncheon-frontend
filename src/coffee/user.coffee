@@ -1,3 +1,7 @@
+dummy = true
+LUNCH_GET = 'lunches/date'
+LUNCH_POST = 'lunches/lunch'
+
 # Dummy data
 dummyLunches = [
     description: "No proste obed"
@@ -41,10 +45,23 @@ transformLunches = (lunches) ->
   
   transformed.sort (a, b) -> Date.parse(a.date.raw) - Date.parse(b.date.raw)
 
+getLunchData = (lunch) ->
+  clone = $.extend {}, lunch
+  clone.date = clone.date.raw
+  clone
+
 # Create our User controller
 angular.module("luncheon").controller "User", ($scope, $http) ->
   # Load lunches
-  $scope.lunches = transformLunches dummyLunches
+  onSuccess = (response) ->
+    $scope.lunches = transformLunches response.data
+  
+  onFailure = (error)->
+    $scope.lunches = if dummy then transformLunches(dummyLunches) else []
+    addMessage "Obedy sa nepodarilo načítať' (chyba #{error.status}).", "danger"
+  
+  now = new Date().yyyymmdd()
+  $http.get("#{LUNCH_GET}/#{now}").then onSuccess, onFailure
 
   # List of months in their string representation
   $scope.months = [
@@ -54,6 +71,14 @@ angular.module("luncheon").controller "User", ($scope, $http) ->
   
   # Function that will order the lunch
   $scope.order = (lunch) ->
-    $http.get('your-server-endpoint')
-    lunch.ordered = true
-    addMessage "Obed #{lunch.date.raw} bol úspešne objednaný.", "success"
+    onSuccess = (response) ->
+      lunch.ordered = true
+      addMessage "Obed #{lunch.date.raw} bol úspešne objednaný.", "success"
+    
+    onFailure = (error)->
+      addMessage "Obed #{lunch.date.raw} sa nepodarilo objednať (chyba #{error.status}).", "danger"
+    
+    newLunch = getLunchData lunch
+    newLunch.ordered = true
+    $http.post(LUNCH_POST, newLunch).then onSuccess, onFailure
+    
