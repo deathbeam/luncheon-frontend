@@ -4,4 +4,4 @@ $ ->
   $('[data-toggle="tooltip"]').tooltip placement: "bottom"
 
 # Create main Angular module
-angular.module "luncheon", []
+angular.module "luncheon", [ "ngLoadingSpinner" ]

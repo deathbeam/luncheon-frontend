@@ -44,4 +44,5 @@ angular.module("luncheon").controller "User", ($scope, $http) ->
   
   # Function that will order the lunch
   $scope.order = (lunch) ->
+    $http.get('your-server-endpoint')
     lunch.ordered = true

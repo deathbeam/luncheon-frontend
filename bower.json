@@ -19,6 +19,7 @@
   "dependencies": {
     "bootstrap": "",
     "font-awesome": "",
-    "angular": ""
+    "angular": "",
+    "angular-loading-spinner": ""
   }
 }
