@@ -15,26 +15,21 @@ dummyLunches = [
 parseDate = (dateString) ->
   date = new Date Date.parse(dateString)
 
-  {
-    raw: dateString
-    day: date.getDate()
-    month: date.getMonth()
-    year: date.getYear()
-  }
+  raw: dateString
+  day: date.getDate()
+  month: date.getMonth()
+  year: date.getYear()
 
 # Transform lunches data to usable representation that can be displayed in template
 transformLunches = (lunches) ->
-  viewLunches = []
+  transformed = []
 
-  for lunch in lunches
-    viewLunch = lunch
-    viewLunch.date = parseDate lunch.date
-    viewLunches.push viewLunch
+  lunches.forEach (l) ->
+    clone = $.extend {}, l
+    clone.date = parseDate l.date
+    transformed.push clone
   
-  viewLunches.sort (a, b) ->
-    a = new Date a.date.raw
-    b = new Date b.date.raw
-    a - b
+  transformed.sort (a, b) -> new Date(a.date.raw) - new Date(b.date.raw)
 
 # Create our User module
 angular.module("luncheon").controller "User", ($scope, $http) ->
