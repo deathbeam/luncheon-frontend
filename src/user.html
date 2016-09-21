@@ -7,20 +7,27 @@
     <meta name="keywords" content="">
     <meta name="author" content="">
     <meta charset="UTF-8">
+
+    <!-- Load all required stylesheets -->
     <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="components/font-awesome/css/font-awesome.min.css">
+
+    <!-- Load our own stylesheets -->
     <link rel="stylesheet" href="css/user.css">
 </head>
 
 <body ng-app="luncheon">
-    <div class="container" ng-controller="User">
-        <div id="messages"></div>
-        <span us-spinner class="spinner"></span>
+    <div class="fullscreen-bg"></div>
+    <div id="messages"></div>
+    <span us-spinner class="spinner"></span>
 
+    <div class="container" ng-controller="User">
         <div class="row">
             <div class="col-xs-12 col-sm-offset-2 col-sm-8 [ ]">
+                <h1 class="heading">Zoznam obedov</h1>
                 <ul class="event-list">
-                    <li ng-repeat="lunch in lunches">
+                    <!-- Iterate over lunches and display each one as list element -->
+                    <li ng-repeat="lunch in lunches" ng-cloak>
                         <time datetime="{{ lunch.date.raw }}">
                             <span class="day">{{ lunch.date.day }}</span>
                             <span class="month">{{ months[lunch.date.month] }}</span>
@@ -29,12 +36,6 @@
                         <div class="info">
                             <!-- <h2 class="title">Obed</h2> -->
                             <p class="desc">{{ lunch.description }}</p>
-                            <!--
-                            <ul>
-                                <li style="width:50%"><a href="#website"><span class="fa fa-globe"></span> Website</a></li>
-                                <li style="width:50%"><span class="fa fa-money"></span> $39.99</li>
-                            </ul>
-                            -->
                         </div>
                         <div class="details">
                             <ul>
@@ -57,12 +58,17 @@
             </div>
         </div>
     </div>
+
+    <!-- Load all required JavaScript libraries -->
+    <!-- NOTE: Scripts must be loaded last, to prevent them from blocking page loading -->
     <script src="components/jquery/dist/jquery.min.js"></script>
     <script src="components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="components/angular/angular.min.js"></script>
     <script src="components/spin.js/spin.js"></script>
     <script src="components/angular-spinner/angular-spinner.min.js"></script>
     <script src="components/angular-loading-spinner/angular-loading-spinner.js"></script>
+
+    <!-- Load our application -->
     <script src="js/app.js"></script>
     <script src="js/user.js"></script>
 </body>

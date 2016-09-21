@@ -6,8 +6,18 @@ dummyLunches = [
     ordered: false
   ,
     description: "No proste ďalší obed"
-    date: "2016-05-04"
+    date: "2016-12-04"
     soup: false
+    ordered: false
+  ,
+    description: "Obed obed obeeeed"
+    date: "2016-05-03"
+    soup: true
+    ordered: false
+  ,
+    description: "Obeeeeeededeeeed"
+    date: "2017-05-04"
+    soup: true
     ordered: false
   ]
 
