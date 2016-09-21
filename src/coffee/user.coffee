@@ -46,3 +46,4 @@ angular.module("luncheon").controller "User", ($scope, $http) ->
   $scope.order = (lunch) ->
     $http.get('your-server-endpoint')
     lunch.ordered = true
+    addMessage "Obed #{lunch.date.raw} bol úspešne objednaný.", "success"
