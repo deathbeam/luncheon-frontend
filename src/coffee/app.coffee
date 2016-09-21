@@ -7,21 +7,33 @@ $ ->
 Date::yyyymmdd = () ->
   @toISOString().substring 0, 10
 
-# Simple message logger
-window.addMessageCounter = 0
-window.addMessage = (message, level="info") ->
-  addMessageCounter++
-  $('#messages').append """
-    <div id="message-#{addMessageCounter}"
-         class="alert alert-#{level} alert-dismissible"
-         role="alert"
-         style="display: none">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      #{message}
-    </div>
-  """
+# Simple JQuery Boostrap alerts plugin
+alertCounter = 0
+$.fn.extend
+  alert: (options) ->
+    settings =
+      text: ""
+      type: "info"
+      delay: 5000
+      fadeIn: "slow"
+      fadeOut: "slow"
+    
+    settings = $.extend settings, options
+    
+    @each () ->
+      alertCounter++
 
-  $('#message-' + addMessageCounter).fadeIn('slow').delay(5000).fadeOut 'slow'
+      $(this).append """
+        <div id="alert-#{alertCounter}"
+            class="alert alert-#{settings.type} alert-dismissible"
+            role="alert"
+            style="display: none">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          #{settings.text}
+        </div>
+      """
+
+      $('#alert-' + alertCounter).fadeIn(settings.fadeIn).delay(settings.delay).fadeOut settings.fadeOut
 
 # Create main Angular module
 angular.module "luncheon", [ "ngLoadingSpinner" ]

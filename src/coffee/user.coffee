@@ -1,4 +1,4 @@
-dummy = true
+test = true
 LUNCH_GET = 'lunches/date'
 LUNCH_POST = 'lunches/lunch'
 
@@ -24,6 +24,12 @@ dummyLunches = [
     soup: true
     ordered: false
   ]
+
+# Simplify adding messages even more
+addMessage = (message, type) ->
+  $("#messages").alert
+    text: message
+    type: type
 
 # Convert date string to day, month and year
 parseDate = (dateString) ->
@@ -57,7 +63,7 @@ angular.module("luncheon").controller "User", ($scope, $http) ->
     $scope.lunches = transformLunches response.data
   
   onFailure = (error)->
-    $scope.lunches = if dummy then transformLunches(dummyLunches) else []
+    $scope.lunches = if test then transformLunches(dummyLunches) else []
     addMessage "Obedy sa nepodarilo načítať' (chyba #{error.status}).", "danger"
   
   now = new Date().yyyymmdd()
@@ -76,6 +82,7 @@ angular.module("luncheon").controller "User", ($scope, $http) ->
       addMessage "Obed #{lunch.date.raw} bol úspešne objednaný.", "success"
     
     onFailure = (error)->
+      lunch.ordered = true if test
       addMessage "Obed #{lunch.date.raw} sa nepodarilo objednať (chyba #{error.status}).", "danger"
     
     newLunch = getLunchData lunch
