@@ -35,7 +35,8 @@
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
-    <script src="bower_components/restangular/dist/restangular.min.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.min.js"></script>
+    <script src="bower_components/angular-http-auth/src/http-auth-interceptor.js"></script>
     <script src="bower_components/spin.js/spin.js"></script>
     <script src="bower_components/angular-spinner/angular-spinner.min.js"></script>
     <script src="bower_components/angular-loading-spinner/angular-loading-spinner.js"></script>
@@ -43,8 +44,17 @@
     <!-- Load our application -->
     <script src="app/app-module.js"></script>
     <script src="app/app-routes.js"></script>
-    <script src="app/services/auth-service.js"></script>
+
+    <!-- Load services -->
+    <script src="app/services/session-service.js"></script>
     <script src="app/services/notify-service.js"></script>
+    <script src="app/services/auth-shared-service.js"></script>
+
+    <!-- Load directives -->
+    <script src="app/directives/access-directive.js"></script>
+
+    <!-- Load controllers -->
+    <script src="app/components/error/error-controller.js"></script>
     <script src="app/components/login/login-controller.js"></script>
     <script src="app/components/user/user-controller.js"></script>
 </body>

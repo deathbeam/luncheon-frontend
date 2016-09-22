@@ -1,14 +1,12 @@
-luncheon.controller "LoginController", ($rootScope, $scope, $location, AuthService, NotifyService) ->
-  $scope.credentials = username: "", password: ""
-
+luncheon.controller "LoginController", ($scope, $location, AuthSharedService, NotifyService, Config) ->
+  $scope.rememberMe = true
   $scope.login = ->
-    AuthService.authenticate $scope.credentials, (
-      (response) ->
+    AuthSharedService.login $scope.username, $scope.password, (
+      (data) ->
         NotifyService.success "Boli ste úspešne prihlásení."
-        $location.path('/user')
       ), (
-      (error) ->
-        NotifyService.danger "Prihlásenie sa nepodarilo (chyba #{error.status})."
-        if test then $location.path('/user') else $location.path('/')
+      (status) ->
+        NotifyService.danger "Prihlásenie sa nepodarilo (chyba #{status})."
+        $location.path('/user') if Config.mockRest
       )
     

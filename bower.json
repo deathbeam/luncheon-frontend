@@ -19,9 +19,11 @@
   "dependencies": {
     "bootstrap": "",
     "font-awesome": "",
+    "lodash": "",
     "angular": "",
     "angular-route": "",
-    "angular-loading-spinner": "",
-    "restangular": ""
+    "angular-resource": "",
+    "angular-http-auth": "",
+    "angular-loading-spinner": ""
   }
 }
