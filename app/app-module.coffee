@@ -24,8 +24,17 @@ luncheon.constant 'Config',
   ###
   mockRest: true
 
-# Set page title variable based on current route
-luncheon.run ($rootScope, $location, Config) ->
+luncheon.run ($rootScope, $location, SessionService, NotifyService, Config) ->
+  $rootScope.$on '$routeChangeStart', (event, next) ->
+    if next.originalPath == "/login" && !!SessionService.credentials
+      event.preventDefault()
+      NotifyService.warning "Už ste prihlásený."
+    else if next.loginRequired && !SessionService.credentials
+      event.preventDefault()
+      NotifyService.danger "Na prístup k #{next.originalPath} musíte byť prihlásený."
+      $rootScope.$broadcast "loginRequired"
+  
+  # Set page title variable based on current route
   $rootScope.$on '$routeChangeSuccess', (event, current, previous) ->
     $rootScope.title = if _.has(current.$$route, "title")
       current.$$route.title
@@ -35,9 +44,12 @@ luncheon.run ($rootScope, $location, Config) ->
   $rootScope.$on 'loginSuccessful', ->
     $location.path('/user')
   
+  $rootScope.$on 'loginRequired', ->
+    $location.path('/login')
+  
   # Call when the the login failed
   $rootScope.$on 'loginFailed', ->
-    if Config.mockRest then $location.path('/user') else $location.path('/')
+    $location.path('/login')
   
   # Call when we logged out
   $rootScope.$on 'logout', ->

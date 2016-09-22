@@ -1,21 +1,24 @@
-luncheon.service "AuthService", ($rootScope, $http) ->
+luncheon.service "AuthService", ($rootScope, $http, SessionService, Config) ->
   login: (credentials, success, failure) ->
-    headers = {}
-    headers = authorization: "Basic " + btoa("#{credentials.username}:#{credentials.password}") if credentials
+    credentials = SessionService.credentials || {} unless credentials
+    headers = authorization: "Basic " + btoa("#{credentials.username}:#{credentials.password}")
 
     onSuccess = (response) ->
-      $rootScope.authenticated = !!response.data.name
-      $rootScope.$broadcast "loginSuccessful"
+      SessionService.create credentials if response.data.name
       success && success(response)
     
     onFailure = (error) ->
-      $rootScope.authenticated = false
-      $rootScope.$broadcast "loginFailed"
+      if Config.mockRest
+        SessionService.create credentials
+      else
+        SessionService.invalidate()
+        $rootScope.$broadcast "loginFailed"
+      
       failure && failure(error)
 
     $http.get('user', headers : headers).then onSuccess, onFailure
   
   logout: ->
     $http.post('logout', {}).finally ->
-      $rootScope.authenticated = false
+      SessionService.invalidate()
       $rootScope.$broadcast "logout"

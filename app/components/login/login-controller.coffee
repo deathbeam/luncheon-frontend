@@ -1,7 +1,15 @@
-luncheon.controller "LoginController", ($rootScope, $scope, $location, AuthService, NotifyService, Config) ->
-  $scope.credentials = username: "", password: ""
+luncheon.controller "LoginController", ($rootScope, $scope, AuthService, NotifyService, Config) ->
+  $scope.credentials = AuthService.credentials
 
   $scope.login = ->
-    onSuccess = -> NotifyService.success "Boli ste úspešne prihlásení."
-    onFailure = (error) -> NotifyService.danger "Prihlásenie sa nepodarilo (chyba #{error.status})."
-    AuthService.login $scope.credentials, onSuccess, onFailure
+    onSuccess = -> 
+      NotifyService.success "Boli ste úspešne prihlásení."
+      $rootScope.$broadcast "loginSuccessful"
+
+    onFailure = (error) -> 
+      NotifyService.danger "Prihlásenie sa nepodarilo (chyba #{error.status})."
+      $rootScope.$broadcast "loginSuccessful" if Config.mockRest
+    
+    AuthService.login @credentials, onSuccess, onFailure
+  
+  AuthService.login()

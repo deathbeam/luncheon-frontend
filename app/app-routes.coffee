@@ -9,6 +9,7 @@ luncheon
         title: 'Zoznam obedov'
         templateUrl: 'app/components/user/user-view.html'
         controller: 'UserController'
+        loginRequired: true
       .otherwise
         redirectTo: '/login'
     
