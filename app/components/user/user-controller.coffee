@@ -22,22 +22,25 @@ dummyLunches = [
   ]
 
 # Create our User controller
-luncheon.controller "UserController", ($scope, $http, NotifyService, Config) ->
+luncheon.controller "UserController", ($scope, Restangular, NotifyService) ->
+  Lunches = Restangular.all 'lunches'
+
   # Load lunches
-  $http.get('lunches/date/' + new Date().yyyymmdd())
-    .success((data, status, headers, config) ->
-      $scope.lunches = data.sort (a, b) -> 
-        a = a.date.toDate()
-        b = b.date.toDate()
+  Lunches.one('date', new Date().toISOString().substring(0, 10)).get().then (
+    (response) ->
+      $scope.lunches = response.data.sort (a, b) -> 
+        a = new Date(a.date[0], a.date[1] - 1, a.date[2], 0, 0, 0, 0)
+        b = new Date(b.date[0], b.date[1] - 1, b.date[2], 0, 0, 0, 0)
         a - b
-    ).error((data, status, headers, config) ->
-      if Config.mockRest
+    ), (
+    (error) ->
+      if test
         $scope.lunches = dummyLunches.sort (a, b) -> 
-          a = a.date.toDate()
-          b = b.date.toDate()
+          a = new Date(a.date[0], a.date[1] - 1, a.date[2], 0, 0, 0, 0)
+          b = new Date(b.date[0], b.date[1] - 1, b.date[2], 0, 0, 0, 0)
           a - b
       
-      NotifyService.danger "Obedy sa nepodarilo načítať' (chyba #{status})."
+      NotifyService.danger "Obedy sa nepodarilo načítať' (chyba #{error.status})."
     )
 
   # List of months in their string representation
@@ -52,12 +55,13 @@ luncheon.controller "UserController", ($scope, $http, NotifyService, Config) ->
     data = $.extend {}, lunch
     data.ordered = true
 
-    $http.post('lunches/lunch', data)
-      .success((data, status, headers, config) ->
+    Lunches.all('lunch').post(data).then (
+      (response) ->
         lunch.ordered = true
-        NotifyService.success "Obed #{lunch.date.toDate().yyyymmdd()} bol úspešne objednaný."
-      ).error((data, status, headers, config) ->
-        lunch.ordered = true if Config.mockRest
-        NotifyService.danger "Obed #{lunch.date.toDate().yyyymmdd()} sa nepodarilo objednať (chyba #{status})."
+        NotifyService.success "Obed #{lunch.date.raw} bol úspešne objednaný."
+      ), (
+      (error) ->
+        lunch.ordered = true if test
+        NotifyService.danger "Obed #{lunch.date.raw} sa nepodarilo objednať (chyba #{error.status})."
       )
     

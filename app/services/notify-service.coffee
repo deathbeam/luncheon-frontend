@@ -1,4 +1,4 @@
-luncheon.service "NotifyService", ->
+luncheon.factory "NotifyService", ->
   self = @
   self.counter = 0
 
