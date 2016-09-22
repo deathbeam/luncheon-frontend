@@ -3,22 +3,21 @@ module.exports = (grunt) ->
     connect:
       app:
         options:
-          livereload: true,
-          base: "public/",
+          base: "public/"
           port: 9000
     copy:
       assets:
-        expand: true,
-        cwd: 'assets/',
-        src: [ '**/*', '!**/*.less' ],
+        expand: true
+        cwd: 'assets/'
+        src: [ '**/*', '!**/*.less' ]
         dest: 'public/assets/'
       html:
-        expand: true,
-        cwd: 'app/',
-        src: '**/*.html',
+        expand: true
+        cwd: 'app/'
+        src: '**/*.html'
         dest: 'public/app/'
       index:
-        src: 'index.html',
+        src: 'index.html'
         dest: 'public/index.html'
     less:
       compile:
@@ -26,10 +25,10 @@ module.exports = (grunt) ->
           compress: false
         files: [
           {
-            expand: true,
-            cwd: 'assets/css/',
-            src: '**/*.less',
-            dest: 'public/assets/css/',
+            expand: true
+            cwd: 'assets/css/'
+            src: '**/*.less'
+            dest: 'public/assets/css/'
             ext: '.css'
           }
         ]
@@ -37,10 +36,10 @@ module.exports = (grunt) ->
       compile:
         files: [
           {
-            expand: true,
-            cwd: 'app/',
-            src: '**/*.coffee',
-            dest: 'public/app/',
+            expand: true
+            cwd: 'app/'
+            src: '**/*.coffee'
+            dest: 'public/app/'
             ext: '.js'
           }
         ]

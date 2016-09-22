@@ -1,10 +1,12 @@
-counter = 0
 luncheon.factory "NotifyService", ->
+  self = @
+  self.counter = 0
+
   notify = (text, type) ->
-    counter++
+    self.counter++
     
     $("#messages").append """
-      <div id="alert-#{counter}"
+      <div id="alert-#{self.counter}"
           class="alert alert-#{type} alert-dismissible"
           role="alert"
           style="display: none">
@@ -13,7 +15,7 @@ luncheon.factory "NotifyService", ->
       </div>
     """
 
-    $('#alert-' + counter).fadeIn("slow").delay(5000).fadeOut "slow"
+    $('#alert-' + self.counter).fadeIn("slow").delay(5000).fadeOut "slow"
 
   info: (m) -> notify m, "info"
   warning: (m) -> notify m, "warning"

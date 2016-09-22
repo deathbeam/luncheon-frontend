@@ -1,5 +1,3 @@
-test = true
-
 # Dummy data
 dummyLunches = [
     description: "No proste obed"
