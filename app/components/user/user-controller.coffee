@@ -1,91 +1,69 @@
 test = true
-LUNCH_GET = 'lunches/date'
-LUNCH_POST = 'lunches/lunch'
 
 # Dummy data
 dummyLunches = [
     description: "No proste obed"
-    date: "2016-04-01"
+    date: [ 2016, 4, 1 ]
     soup: true
     ordered: false
   ,
     description: "No proste ďalší obed"
-    date: "2016-12-04"
+    date: [ 2016, 12, 4 ]
     soup: false
     ordered: false
   ,
     description: "Obed obed obeeeed"
-    date: "2016-05-03"
+    date: [ 2016, 5, 3 ]
     soup: true
     ordered: false
   ,
     description: "Obeeeeeededeeeed"
-    date: "2017-05-04"
+    date: [ 2017, 5, 4 ]
     soup: true
     ordered: false
   ]
 
-# Simplify adding messages even more
-addMessage = (message, type) ->
-  $("#messages").alert
-    text: message
-    type: type
-
-# Convert date string to day, month and year
-parseDate = (dateString) ->
-  date = new Date dateString
-
-  raw: dateString
-  day: date.getDate()
-  month: date.getMonth()
-  year: date.getYear()
-
-# Transform lunches data to usable representation that can be displayed in template
-transformLunches = (lunches) ->
-  transformed = []
-
-  lunches.forEach (l) ->
-    clone = $.extend {}, l
-    clone.date = parseDate l.date
-    transformed.push clone
-  
-  transformed.sort (a, b) -> Date.parse(a.date.raw) - Date.parse(b.date.raw)
-
-getLunchData = (lunch) ->
-  clone = $.extend {}, lunch
-  clone.date = clone.date.raw
-  clone
-
 # Create our User controller
-angular.module("luncheon").controller "UserController", ($scope, $http) ->
+luncheon.controller "UserController", ($scope, Restangular, NotifyService) ->
+  Lunches = Restangular.all 'lunches'
+
   # Load lunches
-  onSuccess = (response) ->
-    $scope.lunches = transformLunches response.data
-  
-  onFailure = (error)->
-    $scope.lunches = if test then transformLunches(dummyLunches) else []
-    addMessage "Obedy sa nepodarilo načítať' (chyba #{error.status}).", "danger"
-  
-  now = new Date().yyyymmdd()
-  $http.get("#{LUNCH_GET}/#{now}").then onSuccess, onFailure
+  Lunches.one('date', new Date().toISOString().substring(0, 10)).get().then (
+    (response) ->
+      $scope.lunches = response.data.sort (a, b) -> 
+        a = new Date(a.date[0], a.date[1] - 1, a.date[2], 0, 0, 0, 0)
+        b = new Date(b.date[0], b.date[1] - 1, b.date[2], 0, 0, 0, 0)
+        a - b
+    ), (
+    (error) ->
+      if test
+        $scope.lunches = dummyLunches.sort (a, b) -> 
+          a = new Date(a.date[0], a.date[1] - 1, a.date[2], 0, 0, 0, 0)
+          b = new Date(b.date[0], b.date[1] - 1, b.date[2], 0, 0, 0, 0)
+          a - b
+      
+      NotifyService.danger "Obedy sa nepodarilo načítať' (chyba #{error.status})."
+    )
 
   # List of months in their string representation
   $scope.months = [
+    "", # Empty entry because of 1 based months from Spring
     "Jan", "Feb", "Mar", "Apr", "Máj", "Jún",
     "Júl", "Aug", "Sep", "Okt", "Nov", "Dec"
     ]
   
   # Function that will order the lunch
   $scope.order = (lunch) ->
-    onSuccess = (response) ->
-      lunch.ordered = true
-      addMessage "Obed #{lunch.date.raw} bol úspešne objednaný.", "success"
-    
-    onFailure = (error)->
-      lunch.ordered = true if test
-      addMessage "Obed #{lunch.date.raw} sa nepodarilo objednať (chyba #{error.status}).", "danger"
-    
-    newLunch = getLunchData lunch
-    newLunch.ordered = true
-    $http.post(LUNCH_POST, newLunch).then onSuccess, onFailure
+    data = $.extend {}, lunch
+    data.ordered = true
+
+    Lunches.all('lunch').post(data).then (
+      (response) ->
+        lunch.ordered = true
+        NotifyService.success "Obed #{lunch.date.raw} bol úspešne objednaný."
+      ), (
+      (error) ->
+        lunch.ordered = true if test
+        NotifyService.danger "Obed #{lunch.date.raw} sa nepodarilo objednať (chyba #{error.status})."
+      )
     

@@ -1,6 +1,5 @@
 angular.module("luncheon")
   .config ($routeProvider) ->
-    
     $routeProvider
       .when '/login',
         title: 'Login'
@@ -9,3 +8,5 @@ angular.module("luncheon")
         title: 'User'
         templateUrl: 'app/components/user/user-view.html'
         controller: 'UserController'
+      .otherwise
+        redirectTo: '/'

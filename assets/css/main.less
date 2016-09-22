@@ -1,0 +1,45 @@
+@background-color: #dcdcdc;
+@foreground-color: #fff;
+@shadow-color: rgba(0,0,0,0.4);
+@fullscreen-image: 'http://cleancanvas.herokuapp.com/img/backgrounds/color-splash.jpg';
+
+body {
+    padding: 60px 0px;
+    background-color: @background-color;
+}
+
+.fullscreen-bg {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-size: cover;
+	background-position: 50% 50%;
+	background-image: url(@fullscreen-image);
+	background-repeat: repeat;
+    z-index: -1;
+}
+
+.heading {
+	color: @foreground-color;
+	text-shadow: 0 2px 2px @shadow-color;
+    margin: 20px;
+}
+
+.spinner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: @shadow-color;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+}
+
+.messages {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9998;
+}

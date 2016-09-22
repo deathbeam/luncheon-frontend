@@ -14,13 +14,14 @@
     "bower_components",
     "test",
     "tests",
-    "dist"
+    "public"
   ],
   "dependencies": {
     "bootstrap": "",
     "font-awesome": "",
     "angular": "",
     "angular-route": "",
-    "angular-loading-spinner": ""
+    "angular-loading-spinner": "",
+    "restangular": ""
   }
 }
