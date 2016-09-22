@@ -22,22 +22,22 @@ dummyLunches = [
   ]
 
 # Create our User controller
-luncheon.controller "UserController", ($scope, Restangular, NotifyService) ->
+luncheon.controller "UserController", ($scope, Restangular, NotifyService, AuthService, Config) ->
   Lunches = Restangular.all 'lunches'
 
   # Load lunches
-  Lunches.one('date', new Date().toISOString().substring(0, 10)).get().then (
+  Lunches.one('date', new Date().yyyymmdd()).get().then (
     (response) ->
       $scope.lunches = response.data.sort (a, b) -> 
-        a = new Date(a.date[0], a.date[1] - 1, a.date[2], 0, 0, 0, 0)
-        b = new Date(b.date[0], b.date[1] - 1, b.date[2], 0, 0, 0, 0)
+        a = a.date.toDate()
+        b = b.date.toDate()
         a - b
     ), (
     (error) ->
-      if test
+      if Config.mockRest
         $scope.lunches = dummyLunches.sort (a, b) -> 
-          a = new Date(a.date[0], a.date[1] - 1, a.date[2], 0, 0, 0, 0)
-          b = new Date(b.date[0], b.date[1] - 1, b.date[2], 0, 0, 0, 0)
+          a = a.date.toDate()
+          b = b.date.toDate()
           a - b
       
       NotifyService.danger "Obedy sa nepodarilo načítať' (chyba #{error.status})."
@@ -50,6 +50,8 @@ luncheon.controller "UserController", ($scope, Restangular, NotifyService) ->
     "Júl", "Aug", "Sep", "Okt", "Nov", "Dec"
     ]
   
+  $scope.logout = -> AuthService.logout()
+
   # Function that will order the lunch
   $scope.order = (lunch) ->
     data = $.extend {}, lunch
@@ -61,7 +63,7 @@ luncheon.controller "UserController", ($scope, Restangular, NotifyService) ->
         NotifyService.success "Obed #{lunch.date.raw} bol úspešne objednaný."
       ), (
       (error) ->
-        lunch.ordered = true if test
+        lunch.ordered = true if Config.mockRest
         NotifyService.danger "Obed #{lunch.date.raw} sa nepodarilo objednať (chyba #{error.status})."
       )
     
