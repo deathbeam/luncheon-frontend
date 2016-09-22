@@ -18,7 +18,7 @@ dummyLunches = [
     ordered: false
   ,
     description: "Obeeeeeededeeeed"
-    date: [ 2017, 5, 4 ]
+    date: [ 2017, 1, 22 ]
     soup: true
     ordered: false
   ]

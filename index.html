@@ -24,7 +24,9 @@
     <div id="messages" class="messages"></div>
     <span us-spinner="{ color: 'white' }" class="spinner"></span>
 
-    <div class="container" ng-view></div>
+    <div class="container" ng-view>
+        <!-- Here, all our views will be loaded -->
+    </div>
 
     <!-- Load all required JavaScript libraries -->
     <!-- NOTE: Scripts must be loaded last, to prevent them from blocking page loading -->
@@ -42,6 +44,7 @@
     <script src="app/app-module.js"></script>
     <script src="app/app-routes.js"></script>
     <script src="app/services/notify-service.js"></script>
+    <script src="app/components/auth/auth-controller.js"></script>
     <script src="app/components/user/user-controller.js"></script>
 </body>
 
