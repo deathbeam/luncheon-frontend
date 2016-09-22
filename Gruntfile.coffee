@@ -7,50 +7,56 @@ module.exports = (grunt) ->
           base: "public/",
           port: 9000
     copy:
-      resources:
+      assets:
         expand: true,
-        cwd: 'src/resources',
-        src: '**/*',
-        dest: 'public/'
-      src:
+        cwd: 'assets/',
+        src: [ '**/*', '!**/*.less' ],
+        dest: 'public/assets/'
+      html:
         expand: true,
-        cwd: 'src/',
+        cwd: 'app/',
         src: '**/*.html',
-        dest: 'public/'
+        dest: 'public/app/'
+      index:
+        src: 'index.html',
+        dest: 'public/index.html'
     less:
-      src:
+      compile:
         options:
           compress: false
         files: [
           {
             expand: true,
-            cwd: 'src/less',
+            cwd: 'assets/css/',
             src: '**/*.less',
-            dest: 'public/css/',
+            dest: 'public/assets/css/',
             ext: '.css'
           }
         ]
     coffee:
-      src:
+      compile:
         files: [
           {
             expand: true,
-            cwd: 'src/coffee',
+            cwd: 'app/',
             src: '**/*.coffee',
-            dest: 'public/js/',
+            dest: 'public/app/',
             ext: '.js'
           }
         ]
     watch:
+      index:
+        files: 'index.html'
+        tasks: 'copy:index'
       html:
-        files: 'src/**/*.html'
-        tasks: 'copy:src'
+        files: 'app/**/*.html'
+        tasks: 'copy:html'
       less:
-        files: 'src/less/**/*.less'
-        tasks: 'less:src'
+        files: 'assets/css/**/*.less'
+        tasks: 'less:compile'
       coffee:
-        files: 'src/coffee/**/*.coffee'
-        tasks: 'coffee:src'
+        files: 'app/**/*.coffee'
+        tasks: 'coffee:compile'
   
   grunt.loadNpmTasks 'grunt-contrib-less'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
@@ -58,6 +64,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-connect'
 
-  grunt.registerTask 'build', ['copy', 'less', 'coffee']
+  grunt.registerTask 'build', ['less', 'coffee', 'copy']
   grunt.registerTask 'serve', ['build', 'connect', 'watch']
   grunt.registerTask 'default', 'build'

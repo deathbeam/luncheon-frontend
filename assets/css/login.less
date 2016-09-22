@@ -1,45 +1,34 @@
 @color_1: #fff;
 
-body {
-	padding-top: 120px;
-	padding-bottom: 40px;
-	background-color: #eee;
-}
-
-.btn {
-	outline: 0;
-	border: none;
-	border-top: none;
-	border-bottom: none;
-	border-left: none;
-	border-right: none;
-	box-shadow: inset 2px -3px rgba(0,0,0,0.15);
-	&:focus {
-		outline: 0;
-		-webkit-outline: 0;
-		-moz-outline: 0;
-	}
-}
-.fullscreen-bg {
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	background-size: cover;
-	background-position: 50% 50%;
-	background-image: url('http://cleancanvas.herokuapp.com/img/backgrounds/color-splash.jpg');
-	background-repeat: repeat;
-}
 .form-signin {
 	max-width: 280px;
 	padding: 15px;
 	margin: 0 auto;
 	margin-top: 50px;
 	margin-bottom: 10px;
+
+	.btn {
+		outline: 0;
+		border: none;
+		border-top: none;
+		border-bottom: none;
+		border-left: none;
+		border-right: none;
+		box-shadow: inset 2px -3px rgba(0,0,0,0.15);
+		&:focus {
+			outline: 0;
+			-webkit-outline: 0;
+			-moz-outline: 0;
+		}
+	}
+
 	.form-signin-heading {
 		margin-bottom: 10px;
+		color: @color_1;
+		text-align: center;
+		text-shadow: 0 2px 2px rgba(0,0,0,0.5);
 	}
+
 	.form-control {
 		position: relative;
 		font-size: 16px;
@@ -52,6 +41,7 @@ body {
 			z-index: 2;
 		}
 	}
+
 	input[type="text"] {
 		margin-bottom: -1px;
 		border-bottom-left-radius: 0;
@@ -62,6 +52,7 @@ body {
 		border-left-style: solid;
 		border-color: #000;
 	}
+
 	input[type="password"] {
 		margin-bottom: 10px;
 		border-top-left-radius: 0;
@@ -73,9 +64,4 @@ body {
 		border-color: rgb(0,0,0);
 		border-top: 1px solid rgba(0,0,0,0.08);
 	}
-}
-.form-signin-heading {
-	color: @color_1;
-	text-align: center;
-	text-shadow: 0 2px 2px rgba(0,0,0,0.5);
 }

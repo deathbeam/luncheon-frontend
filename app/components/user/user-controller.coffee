@@ -57,7 +57,7 @@ getLunchData = (lunch) ->
   clone
 
 # Create our User controller
-angular.module("luncheon").controller "User", ($scope, $http) ->
+angular.module("luncheon").controller "UserController", ($scope, $http) ->
   # Load lunches
   onSuccess = (response) ->
     $scope.lunches = transformLunches response.data

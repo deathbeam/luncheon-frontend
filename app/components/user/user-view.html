@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col-xs-12 col-sm-offset-2 col-sm-8 [ ]">
+        <h1 class="heading">Zoznam obedov</h1>
+        <ul class="event-list">
+            <!-- Iterate over lunches and display each one as list element -->
+            <li ng-repeat="lunch in lunches" ng-cloak>
+                <time datetime="{{ lunch.date.raw }}">
+                    <span class="day">{{ lunch.date.day }}</span>
+                    <span class="month">{{ months[lunch.date.month] }}</span>
+                    <span class="year">{{ lunch.date.year }}</span>
+                </time>
+                <div class="info">
+                    <!-- <h2 class="title">Obed</h2> -->
+                    <p class="desc">{{ lunch.description }}</p>
+                </div>
+                <div class="details">
+                    <ul>
+                        <li class="ordered" style="width:33%" ng-model="lunch.ordered" ng-switch="lunch.ordered">
+                            <span ng-switch-when="true" class="fa fa-fw fa-check-square-o" data-toggle="tooltip" title="Obed objednaný"></span>
+                            <a href="" ng-switch-when="false" ng-click="order(lunch)" data-toggle="tooltip" title="Objednať obed">
+                                <i class="fa fa-fw fa-square-o"></i>
+                            </a>
+                        </li>
+                        <li class="food-type" style="width:33%" >
+                            <span class="fa fa-fw fa-cutlery" data-toggle="tooltip" title="Hlavné jedlo"></span>
+                        </li>
+                        <li class="food-type" style="width:34%" ng-if="lunch.soup">
+                            <span class="fa fa-fw fa-spoon" data-toggle="tooltip" title="Polievka"></span>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

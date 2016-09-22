@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html ng-app="luncheon">
+
+<head>
+    <title ng-bind="title + ' | Luncheon'">Luncheon</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <meta charset="UTF-8">
+    <base href="/">
+
+    <!-- Load all required stylesheets -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+
+    <!-- Load our own stylesheets -->
+    <link rel="stylesheet" href="assets/css/user.css">
+    <link rel="stylesheet" href="assets/css/login.css">
+</head>
+
+<body>
+    <div class="fullscreen-bg"></div>
+    <div id="messages"></div>
+    <span us-spinner="{ color: 'white' }" class="spinner"></span>
+
+    <div class="container" ng-view></div>
+
+    <!-- Load all required JavaScript libraries -->
+    <!-- NOTE: Scripts must be loaded last, to prevent them from blocking page loading -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/spin.js/spin.js"></script>
+    <script src="bower_components/angular-spinner/angular-spinner.min.js"></script>
+    <script src="bower_components/angular-loading-spinner/angular-loading-spinner.js"></script>
+
+    <!-- Load our application -->
+    <script src="app/app-module.js"></script>
+    <script src="app/app-routes.js"></script>
+    <script src="app/components/user/user-controller.js"></script>
+</body>
+
+</html>

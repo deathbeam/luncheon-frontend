@@ -36,4 +36,9 @@ $.fn.extend
       $('#alert-' + alertCounter).fadeIn(settings.fadeIn).delay(settings.delay).fadeOut settings.fadeOut
 
 # Create main Angular module
-angular.module "luncheon", [ "ngLoadingSpinner" ]
+luncheon = angular.module "luncheon", [ "ngRoute", "ngLoadingSpinner" ]
+
+# Set page title variable based on current route
+luncheon.run ($rootScope) ->
+  $rootScope.$on '$routeChangeSuccess', (event, current, previous) ->
+    $rootScope.title = current.$$route.title
