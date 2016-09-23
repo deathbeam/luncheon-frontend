@@ -1,16 +1,13 @@
-luncheon.controller "LoginController", ($rootScope, $scope, AuthService, NotifyService) ->
+luncheon.controller "LoginController", ($rootScope, $scope, AuthService, NotifyService, AUTH_EVENTS) ->
   $scope.credentials = AuthService.credentials
 
   $scope.login = ->
     onSuccess = -> 
       NotifyService.success "Boli ste úspešne prihlásení."
-      $rootScope.$broadcast "loginSuccessful"
+      $rootScope.$broadcast AUTH_EVENTS.loginSuccess
 
     onFailure = (error) -> 
       NotifyService.danger "Prihlásenie sa nepodarilo (chyba #{error.status})."
-      $rootScope.$broadcast "loginFailed"
+      $rootScope.$broadcast AUTH_EVENTS.loginFailed
     
     AuthService.login $scope.credentials, onSuccess, onFailure
-  
-  # Check if we are already logged in on login page load
-  AuthService.checkLogin -> $rootScope.$broadcast "loginSuccessful"

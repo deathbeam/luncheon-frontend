@@ -1,5 +1,5 @@
 # Create our User controller
-luncheon.controller "UserController", ($scope, $http, NotifyService, AuthService, OrderService, Config) ->
+luncheon.controller "UserController", ($scope, $http, NotifyService, AuthService, OrderService, CONFIG) ->
   # Split orders to soups and meals and sort them
   transformOrders = (orders) ->
     transformed = new Map()
@@ -64,7 +64,7 @@ luncheon.controller "UserController", ($scope, $http, NotifyService, AuthService
         NotifyService.success "Objednávka #{lunch.date.toId()} bola úspešne spracovaná."
       ), (
       (error) ->
-        lunch.ordered = true if Config.mockRest
+        lunch.ordered = true if CONFIG.mockRest
         NotifyService.danger "Objednávku #{lunch.date.toId()} sa nepodarilo spracovať (chyba #{error.status})."
       )
   
@@ -79,7 +79,7 @@ luncheon.controller "UserController", ($scope, $http, NotifyService, AuthService
         NotifyService.success "Objednávka #{lunch.date.toId()} bola úspešne zrušená."
       ), (
       (error) ->
-        lunch.ordered = false if Config.mockRest
+        lunch.ordered = false if CONFIG.mockRest
         NotifyService.danger "Objednávku #{lunch.date.toId()} sa nepodarilo zrušiť (chyba #{error.status})."
       )
     

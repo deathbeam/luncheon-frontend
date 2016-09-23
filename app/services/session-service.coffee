@@ -1,13 +1,13 @@
 # Manages logged in user session
 luncheon.service "SessionService", ->
-  @create = (credentials, id) ->
-    @credentials = credentials
-    @authenticated = true
-    @id = id
+  @create = (sessionId, userId, userRole) ->
+    @id = sessionId
+    @userId = userId
+    @userRole = userRole
 
   @invalidate = ->
-    @credentials = null
-    @authenticated = false
     @id = null
+    @userId = null
+    @userRole = null
 
   @ 

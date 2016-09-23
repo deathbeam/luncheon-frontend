@@ -1,17 +1,20 @@
 luncheon
-  .config ($routeProvider, $httpProvider) ->
+  .config ($routeProvider, $httpProvider, USER_ROLES) ->
     $routeProvider
       .when '/login',
         title: 'Prihlásenie'
         templateUrl: 'app/components/login/login-view.html'
         controller: 'LoginController'
+        authorizedRoles: USER_ROLES.all
       .when '/user',
         title: 'Zoznam obedov'
         templateUrl: 'app/components/user/user-view.html'
         controller: 'UserController'
         loginRequired: true
+        authorizedRoles: USER_ROLES.all
       .otherwise
         redirectTo: '/login'
+        authorizedRoles: USER_ROLES.all
     
     ###
     The custom "X-Requested-With" is a conventional header sent by browser clients,

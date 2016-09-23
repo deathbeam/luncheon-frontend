@@ -1,20 +1,27 @@
-luncheon.service "AuthService", ($rootScope, $http, SessionService, Config) ->
+luncheon.service "AuthService", ($rootScope, $http, SessionService, CONFIG, USER_ROLES) ->
+  isAuthenticated = () -> 
+    !!SessionService.userId
+  
+  isAuthorized = (authorizedRoles) ->
+    authorizedRoles = [authorizedRoles] unless angular.isArray authorizedRoles
+    isAuthenticated() && (
+      authorizedRoles.indexOf(USER_ROLES.all) != -1 ||
+      authorizedRoles.indexOf(SessionService.userRole) != -1)
+  
   login = (credentials, success, failure) ->
-    # Use Session credentials if possible, and recheck if our session is still valid
-    # If we do not have session, just try to log in with provided credentials
-    credentials = SessionService.credentials || {} unless credentials
+    credentials = credentials || {}
 
     # Create Base64 encrypted header from credentials
     headers = authorization: "Basic " + btoa("#{credentials.username}:#{credentials.password}")
 
     onSuccess = (response) ->
       if !!response.data.id
-        SessionService.create credentials, id
+        SessionService.create response.data.id, response.data.user.id, response.data.user.role
         success && success(response)
     
     onFailure = (error) ->
-      if Config.mockRest && credentials.username == Config.mockUsername && credentials.password == Config.mockPassword
-        SessionService.create credentials, 0
+      if CONFIG.mockRest && credentials.username == CONFIG.mockUsername && credentials.password == CONFIG.mockPassword
+        SessionService.create 1, 1, USER_ROLES.admin
         success && success(error)
       else
         SessionService.invalidate()
@@ -26,11 +33,9 @@ luncheon.service "AuthService", ($rootScope, $http, SessionService, Config) ->
   logout = ->
     $http.post('logout', {}).finally ->
       SessionService.invalidate()
-      $rootScope.$broadcast "logout"
-  
-  checkLogin = (success, failure) ->
-    login null, success, failure
+      $rootScope.$broadcast AUTH_EVENTS.logoutSuccess
 
   login: login
   logout: logout
-  checkLogin: checkLogin
+  isAuthenticated: isAuthenticated
+  isAuthorized: isAuthorized

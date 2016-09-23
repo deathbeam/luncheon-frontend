@@ -1,5 +1,5 @@
 <!-- Check if we are authenticated and redirect -->
-<form class="form-signin" ng-submit="login()">
+<form class="form-signin" method="POST" ng-submit="login()">
     <h1 class="heading text-muted">Prihlásenie</h1>
     <input type="text" class="form-control" placeholder="Email alebo čiarový kód" required="" autofocus="" ng-model="credentials.username">
     <input type="password" class="form-control" placeholder="Heslo (potrebné iba pri emaile)" ng-model="credentials.password">
