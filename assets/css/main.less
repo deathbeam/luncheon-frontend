@@ -10,6 +10,12 @@ body {
 
 .nav, .pagination, .carousel, a { cursor: pointer; }
 
+a[disabled] {
+    cursor: not-allowed!important;
+    opacity: 0.65!important;
+    filter: alpha(opacity=65)!important;
+}
+
 .fullscreen-bg {
 	position: fixed;
 	top: 0;

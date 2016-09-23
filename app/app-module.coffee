@@ -1,3 +1,6 @@
+# Disable disabled things
+$ -> $('body').on 'click', 'a.disabled', (event) -> event.preventDefault()
+
 # Transform date array to date
 Array::toDate = -> new Date @[0], @[1] - 1, @[2], 0, 0, 0, 0
 

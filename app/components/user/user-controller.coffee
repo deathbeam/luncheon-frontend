@@ -6,6 +6,7 @@ luncheon.controller "UserController", ($scope, $http, NotifyService, AuthService
 
     divide = (order, l) ->
       order.ordered = order.ordered || l.ordered
+      order.changeable = order.changeable && l.changeable
 
       switch l.lunch.soup
         when true 
@@ -21,6 +22,7 @@ luncheon.controller "UserController", ($scope, $http, NotifyService, AuthService
       unless transformed.has key
         transformed.set key,
           ordered: false
+          changeable: true
           date: l.lunch.date.toDate()
           soups: []
           meals: []
