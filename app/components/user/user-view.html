@@ -1,32 +1,74 @@
 <div class="row">
-    <div class="col-xs-12 col-sm-offset-2 col-sm-8">
+    <div class="col-xs-12 col-sm-offset-1 col-sm-10">
         <h1 class="heading">
             Zoznam obedov
             <small><a href="" ng-click="logout()">odhlásiť sa</a>
         </h1>
         <ul class="event-list">
-            <!-- Iterate over lunches and display each one as list element -->
-            <li ng-repeat="lunch in lunches" ng-cloak>
-                <time datetime="{{ lunch.date.join('-') }}">
-                    <span class="day">{{ lunch.date[2] }}</span>
-                    <span class="month">{{ months[lunch.date[1]] }}</span>
-                    <span class="year">{{ lunch.date[0] }}</span>
+            <!-- Iterate over orderes and display each one as list element -->
+            <li ng-repeat="order in orders" ng-cloak>
+                <time datetime="{{ order.date.yyyymmdd() }}">
+                    <span class="day">{{ order.date.getDate() }}</span>
+                    <span class="month">{{ months[order.date.getMonth()] }}</span>
+                    <span class="year">{{ order.date.getFullYear() }}</span>
                 </time>
                 <div class="info">
-                    <p class="desc">{{ lunch.description }}</p>
+                    <div class="desc">
+                        <div class="form-group meals">
+                            <label class="control-label"><i class="fa fa-fw fa-cutlery"></i> Hlavné jedlo</label>
+
+                            <div class="input-group">
+                                <ui-select ng-model="order.selectedMeal" always-open>
+                                    <ui-select-match placeholder="Vyberte si hlavné jedlo...">
+                                        <span ng-bind="$select.selected.lunch.description"></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in order.meals">
+                                        <span ng-bind="item.lunch.description"></span>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="order.selectedMeal = undefined" class="btn btn-default">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group soups">
+                            <label class="control-label"><i class="fa fa-fw fa-spoon"></i> Polievka</label>
+                            
+                            <div class="input-group">
+                                <ui-select ng-model="order.selectedSoup" always-open>
+                                    <ui-select-match placeholder="Vyberte si polievku...">
+                                        <span ng-bind="$select.selected.lunch.description"></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in order.soups">
+                                        <span ng-bind="item.lunch.description"></span>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="order.selectedSoup = undefined" class="btn btn-default">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="details">
                     <ul>
-                        <li class="ordered" style="width:33%" ng-model="lunch.ordered" ng-switch="lunch.ordered">
+                        <li class="ordered" style="width: 33%" ng-model="order.ordered" ng-switch="order.ordered">
                             <span ng-switch-when="true" class="fa fa-fw fa-check-square-o" data-toggle="tooltip" title="Obed objednaný"></span>
-                            <a href="" ng-switch-when="false" ng-click="order(lunch)" data-toggle="tooltip" title="Objednať obed">
+                            <a href="" ng-switch-when="false" ng-click="order(order)" data-toggle="tooltip" title="Objednať obed">
                                 <i class="fa fa-fw fa-square-o"></i>
                             </a>
                         </li>
-                        <li class="food-type" style="width:33%" >
+                        <li class="food-type" style="width:33%" ng-model="order.selectedMeal" ng-if="!!order.selectedMeal">
                             <span class="fa fa-fw fa-cutlery" data-toggle="tooltip" title="Hlavné jedlo"></span>
                         </li>
-                        <li class="food-type" style="width:34%" ng-if="lunch.soup">
+                        <li class="food-type" style="width:34%" ng-model="order.selectedSoup" ng-if="!!order.selectedSoup">
                             <span class="fa fa-fw fa-spoon" data-toggle="tooltip" title="Polievka"></span>
                         </li>
                     </ul>

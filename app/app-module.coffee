@@ -1,7 +1,7 @@
-# This function is ran after window is fully loaded
-$ ->
+$ -> 
   # Load Bootstrap tooltips
   $('[data-toggle="tooltip"]').tooltip placement: "bottom"
+
 
 # Transform date array to date
 Array::toDate = -> new Date @[0], @[1] - 1, @[2], 0, 0, 0, 0
@@ -10,12 +10,7 @@ Array::toDate = -> new Date @[0], @[1] - 1, @[2], 0, 0, 0, 0
 Date::yyyymmdd = -> @toISOString().substring 0, 10
 
 # Create main Angular module
-luncheon = window.luncheon = 
-  angular.module "luncheon", [
-    "ngRoute",
-    "restangular",
-    "ngLoadingSpinner"
-    ]
+luncheon = window.luncheon = angular.module "luncheon", [ "ngRoute", "ngLoadingSpinner", "ui.select" ]
 
 luncheon.constant 'Config',
   ###
@@ -24,15 +19,26 @@ luncheon.constant 'Config',
   ###
   mockRest: true
 
-luncheon.run ($rootScope, $location, SessionService, NotifyService, Config) ->
+  ###
+  Username and password to use for loggining in when we are mocking rest
+  ###
+  mockUsername: "mock"
+  mockPassword: "mock"
+
+luncheon.run ($rootScope, $location, SessionService, NotifyService, AuthService, Config) ->
+  # Prevent changing routes if not allowed to
   $rootScope.$on '$routeChangeStart', (event, next) ->
-    if next.originalPath == "/login" && !!SessionService.credentials
+    # If we are trying to go back to login page and we are already logged in, prevent it
+    if next.originalPath == "/login" && SessionService.authenticated
       event.preventDefault()
       NotifyService.warning "Už ste prihlásený."
-    else if next.loginRequired && !SessionService.credentials
-      event.preventDefault()
-      NotifyService.danger "Na prístup k #{next.originalPath} musíte byť prihlásený."
-      $rootScope.$broadcast "loginRequired"
+    # If we are trying to access page where login is required and we are not logged in, prevent it
+    else if next.loginRequired
+      AuthService.checkLogin()
+      
+      unless SessionService.authenticated
+        NotifyService.danger "Na prístup k #{next.originalPath} musíte byť prihlásený."
+        $rootScope.$broadcast "loginRequired"
   
   # Set page title variable based on current route
   $rootScope.$on '$routeChangeSuccess', (event, current, previous) ->
@@ -42,15 +48,16 @@ luncheon.run ($rootScope, $location, SessionService, NotifyService, Config) ->
   
   # Call when the the login is confirmed
   $rootScope.$on 'loginSuccessful', ->
-    $location.path('/user')
-  
-  $rootScope.$on 'loginRequired', ->
-    $location.path('/login')
+    $location.path('/user').replace()
   
   # Call when the the login failed
   $rootScope.$on 'loginFailed', ->
+    $location.path('/login').replace()
+  
+  # Call when someone tried to access page where login is required
+  $rootScope.$on 'loginRequired', ->
     $location.path('/login')
   
   # Call when we logged out
   $rootScope.$on 'logout', ->
-    $location.path('/')
+    $location.path('/login')

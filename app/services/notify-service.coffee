@@ -1,3 +1,4 @@
+# This service creates various Bootstrap notification to messages area
 luncheon.service "NotifyService", ->
   self = @
   self.counter = 0

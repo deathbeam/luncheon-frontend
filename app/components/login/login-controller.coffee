@@ -1,4 +1,4 @@
-luncheon.controller "LoginController", ($rootScope, $scope, AuthService, NotifyService, Config) ->
+luncheon.controller "LoginController", ($rootScope, $scope, AuthService, NotifyService) ->
   $scope.credentials = AuthService.credentials
 
   $scope.login = ->
@@ -8,8 +8,9 @@ luncheon.controller "LoginController", ($rootScope, $scope, AuthService, NotifyS
 
     onFailure = (error) -> 
       NotifyService.danger "Prihlásenie sa nepodarilo (chyba #{error.status})."
-      $rootScope.$broadcast "loginSuccessful" if Config.mockRest
+      $rootScope.$broadcast "loginFailed"
     
-    AuthService.login @credentials, onSuccess, onFailure
+    AuthService.login $scope.credentials, onSuccess, onFailure
   
-  AuthService.login()
+  # Check if we are already logged in on login page load
+  AuthService.checkLogin -> $rootScope.$broadcast "loginSuccessful"

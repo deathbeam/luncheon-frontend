@@ -17,11 +17,13 @@
     "public"
   ],
   "dependencies": {
+    "jquery": "",
+    "lodash": "",
     "bootstrap": "",
     "font-awesome": "",
     "angular": "",
+    "angular-ui-select": "",
     "angular-route": "",
-    "angular-loading-spinner": "",
-    "restangular": ""
+    "angular-loading-spinner": ""
   }
 }
