@@ -1,16 +1,12 @@
-$ -> 
-  # Load Bootstrap tooltips
-  $('[data-toggle="tooltip"]').tooltip placement: "bottom"
-
-
 # Transform date array to date
 Array::toDate = -> new Date @[0], @[1] - 1, @[2], 0, 0, 0, 0
 
 # Nice string representation of date
 Date::yyyymmdd = -> @toISOString().substring 0, 10
+Date::toId = -> @yyyymmdd().split('-').join('')
 
 # Create main Angular module
-luncheon = window.luncheon = angular.module "luncheon", [ "ngRoute", "ngLoadingSpinner", "ui.select" ]
+luncheon = window.luncheon = angular.module "luncheon", [ "ngRoute", "ngLoadingSpinner", "ui.bootstrap" ]
 
 luncheon.constant 'Config',
   ###
@@ -22,8 +18,8 @@ luncheon.constant 'Config',
   ###
   Username and password to use for loggining in when we are mocking rest
   ###
-  mockUsername: "mock"
-  mockPassword: "mock"
+  mockUsername: "admin"
+  mockPassword: "admin"
 
 luncheon.run ($rootScope, $location, SessionService, NotifyService, AuthService, Config) ->
   # Prevent changing routes if not allowed to

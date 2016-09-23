@@ -3,22 +3,31 @@ dummyLunches = [{"user":{"id":76,"pid":"533","barCode":"0003369000","firstName":
 
 luncheon.service "OrderService", ($http, $q, SessionService, Config) ->
   forDate = (date) ->
+    date = date.toId()
     defer = $q.defer()
 
-    onSuccess = (response) ->
+    onOrderSuccess = (response) ->
       order = $.extend {}, response.data
-      
-      http.get("lunches/id/#{order.lunch}").then (response) ->
+
+      onLunchSuccess = (response) ->
         order.lunch = response.data
         defer.resolve order
+      
+      onLunchFailure = (error) ->
+        if Config.mockRest
+          defer.resolve dummyLunches
+        else
+          defer.reject error
+
+      http.get("lunches/id/#{order.lunch}").then onLunchSuccess, onLunchFailure
     
-    onFailure = (error) ->
+    onOrderFailure = (error) ->
       if Config.mockRest
         defer.resolve dummyLunches
       else
-        defer.reject "Obedy sa nepodarilo načítať' (chyba #{error.status})."
+        defer.reject error
     
-    $http.get("orders/date/#{date}/user/#{SessionService.id}").then onSuccess, onFailure
+    $http.get("orders/date/#{date}/user/#{SessionService.id}").then onOrderSuccess, onOrderFailure
     defer.promise
   
   forDate: forDate

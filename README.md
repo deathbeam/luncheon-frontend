@@ -17,4 +17,4 @@ bower install
 grunt serve
 ```
 
-Now open `http://localhost:9000` and.. voila!
+Now open `http://localhost:9000` and.. voila! When in `mockRest` mode, username is `admin` and password is `admin`.

@@ -32,14 +32,13 @@ luncheon.controller "UserController", ($scope, $http, NotifyService, AuthService
         a.date - b.date
 
   # Load lunches
-  OrderService.forDate(new Date().yyyymmdd()).then (
+  now = new Date()
+  OrderService.forDate(now).then (
     (response) ->
-      console.log response
       $scope.orders = transformOrders response
-      console.log $scope.orders
     ), (
     (error) ->
-      NotifyService.danger error
+      NotifyService.danger "Objednávku #{now.toId()} sa nepodarilo načítať (chyba #{error.status})."
     )
 
   # List of months in their string representation
@@ -53,17 +52,32 @@ luncheon.controller "UserController", ($scope, $http, NotifyService, AuthService
   $scope.selected = value: [ 2016, 1, 11 ].toDate()
 
   # Function that will order the lunch
-  $scope.order = (lunch) ->
+  $scope.save = (lunch) ->
     data = $.extend {}, lunch
     data.ordered = true
 
     $http.post("lunches/lunch", data).then (
       (response) ->
         lunch.ordered = true
-        NotifyService.success "Obed #{lunch.date.raw} bol úspešne objednaný."
+        NotifyService.success "Objednávka #{lunch.date.toId()} bola úspešne spracovaná."
       ), (
       (error) ->
         lunch.ordered = true if Config.mockRest
-        NotifyService.danger "Obed #{lunch.date.raw} sa nepodarilo objednať (chyba #{error.status})."
+        NotifyService.danger "Objednávku #{lunch.date.toId()} sa nepodarilo spracovať (chyba #{error.status})."
+      )
+  
+  # Function that will order the lunch
+  $scope.cancel = (lunch) ->
+    data = $.extend {}, lunch
+    data.ordered = false
+
+    $http.post("lunches/lunch", data).then (
+      (response) ->
+        lunch.ordered = false
+        NotifyService.success "Objednávka #{lunch.date.toId()} bola úspešne zrušená."
+      ), (
+      (error) ->
+        lunch.ordered = false if Config.mockRest
+        NotifyService.danger "Objednávku #{lunch.date.toId()} sa nepodarilo zrušiť (chyba #{error.status})."
       )
     

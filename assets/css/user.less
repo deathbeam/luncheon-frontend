@@ -2,20 +2,14 @@
 @event-detail: #4b6ea8;
 @event-time: #337ab7;
 @event-time-alt: #295479;
-@event-height: 400px;
+@event-time-ordered: #33b79a;
+@event-time-ordered-alt: #297964;
+@event-height: 420px;
 
 .event-list {
     list-style: none;
     margin: 0px;
     padding: 0px;
-
-    .meals {
-        margin-bottom: 170px;
-    }
-
-    .soups {
-        margin-bottom: 60px;
-    }
 
     .input-group {
         margin-bottom: 10px;
@@ -60,15 +54,22 @@
             }
         }
 
+        >.ordered {
+            background-color: @event-time-ordered;
+        }
+
         &:nth-child(even) {
             >time {
                 background-color: @event-time-alt;
             }
+            
+            >.ordered {
+                background-color: @event-time-ordered-alt;
+            }
         }
 
         >.info {
-            padding-top: 5px;
-            padding-left: 5px;
+            padding: 10px;
             text-align: center;
         }
 
@@ -159,12 +160,12 @@
 
             >time {
                 display: block;
-                width: 160px;
+                width: 120px;
                 float: left;
                 height: @event-height;
                 padding: 0px;
                 margin: 0px;
-                padding-top: 20px;
+                padding-top: 15px;
             }
         }
     }
