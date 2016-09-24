@@ -16,37 +16,45 @@ luncheon.controller "UserController", ($scope, $http, NotifyService, AuthService
     "Júl", "Aug", "Sep", "Okt", "Nov", "Dec"
     ]
   
+  # Bind logout function to current scope
   $scope.logout = -> AuthService.logout()
 
-  $scope.selected = value: [ 2016, 1, 11 ].toDate()
-
   # Function that will order the lunch
-  $scope.save = (lunch) ->
-    data = $.extend {}, lunch
-    data.ordered = true
+  $scope.makeOrder = (order) ->
+    unless order.selectedMeal
+      NotifyService.warning "Objednávku #{order.date.toId()} sa nepodarilo spracovať (prosím vyberte aspoň jedno hlavné jedlo)."
+      return
 
-    $http.post("lunches/lunch", data).then (
+    OrderService.save(order).then (
       (response) ->
-        lunch.ordered = true
-        NotifyService.success "Objednávka #{lunch.date.toId()} bola úspešne spracovaná."
+        order.ordered = true
+        NotifyService.success "Objednávka #{order.date.toId()} bola úspešne spracovaná."
       ), (
       (error) ->
-        lunch.ordered = true if CONFIG.mockRest
-        NotifyService.danger "Objednávku #{lunch.date.toId()} sa nepodarilo spracovať (chyba #{error.status})."
+        order.ordered = true if CONFIG.mockRest
+        NotifyService.danger "Objednávku #{order.date.toId()} sa nepodarilo spracovať (chyba #{error.status} #{error.statusText})."
       )
   
-  # Function that will order the lunch
-  $scope.cancel = (lunch) ->
-    data = $.extend {}, lunch
+  # Function that cancel order of the lunch
+  $scope.cancelOrder = (order) ->
+    data = $.extend {}, order
     data.ordered = false
+    data.selectedMeal = null
+    data.selectedSoup = null
 
-    $http.post("lunches/lunch", data).then (
+    OrderService.save(data).then (
       (response) ->
-        lunch.ordered = false
-        NotifyService.success "Objednávka #{lunch.date.toId()} bola úspešne zrušená."
+        order.ordered = data.ordered
+        order.selectedMeal = data.selectedMeal
+        order.selectedSoup = data.selectedSoup
+        NotifyService.success "Objednávka #{order.date.toId()} bola úspešne zrušená."
       ), (
       (error) ->
-        lunch.ordered = false if CONFIG.mockRest
-        NotifyService.danger "Objednávku #{lunch.date.toId()} sa nepodarilo zrušiť (chyba #{error.status})."
+        if CONFIG.mockRest
+          order.ordered = data.ordered
+          order.selectedMeal = data.selectedMeal
+          order.selectedSoup = data.selectedSoup
+        
+        NotifyService.danger "Objednávku #{order.date.toId()} sa nepodarilo zrušiť (chyba #{error.status} #{error.statusText})."
       )
     

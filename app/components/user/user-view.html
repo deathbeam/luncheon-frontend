@@ -32,10 +32,10 @@
                 <div class="details">
                     <ul>
                         <li class="ordered" style="width: 33%" ng-model="order.ordered" ng-switch="order.ordered">
-                            <a href="" ng-switch-when="true" ng-disabled="!order.changeable" ng-click="order.changeable && cancel(order)" uib-tooltip="Zrušiť objednávku'">
+                            <a href="" ng-switch-when="true" ng-disabled="!order.changeable" ng-click="order.changeable && cancelOrder(order)" uib-tooltip="Zrušiť objednávku'">
                                 <i class="fa fa-fw fa-check-square-o"></i>
                             </a>
-                            <a href="" ng-switch-when="false" ng-disabled="!order.changeable" ng-click="order.changeable && save(order)" uib-tooltip="Objednať obed">
+                            <a href="" ng-switch-when="false" ng-disabled="!order.changeable" ng-click="order.changeable && makeOrder(order)" uib-tooltip="Objednať obed">
                                 <i class="fa fa-fw fa-square-o"></i>
                             </a>
                         </li>

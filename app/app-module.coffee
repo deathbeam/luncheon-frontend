@@ -6,7 +6,15 @@ Array::toDate = -> new Date @[0], @[1] - 1, @[2], 0, 0, 0, 0
 
 # Nice string representation of date
 Date::yyyymmdd = -> @toISOString().substring 0, 10
-Date::toId = -> @yyyymmdd().split('-').join('')
+
+# Construct ID from date
+Date::toId = ->
+  mm = @getMonth() + 1 # getMonth() is zero-based
+  dd = @getDate()
+  mm = "0#{mm}" if mm < 10
+  dd = "0#{dd}" if dd < 10
+
+  [@getFullYear(), mm, dd].join('')
 
 # Create main Angular module
 luncheon = window.luncheon = angular.module "luncheon", [ "ngRoute", "ngLoadingSpinner", "ui.bootstrap", "http-auth-interceptor" ]
