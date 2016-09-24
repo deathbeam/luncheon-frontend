@@ -64,10 +64,6 @@ function generateLunch(id) {
 }
 
 var authorization = function(req, res, next) {
-  if (loggedIn) {
-    return next();
-  }
-
   // Something messed up. 
   function fail() {
     res.set('WWW-Authenticate', authHeader.format('Basic'));
@@ -75,7 +71,18 @@ var authorization = function(req, res, next) {
   }
 
   // Get authorization header. 
-  var auth = authHeader.parse(req.get('authorization'));
+  var header = req.get('authorization');
+
+  if (header == null) {
+    // We are already logged in and we are not trying to relog
+    if (loggedIn) {
+      return next();
+    } else {
+      return fail();
+    }
+  }
+
+  var auth = authHeader.parse(header);
 
   // No basic authentication provided. 
   if (auth.scheme !== 'Basic') {
@@ -94,13 +101,28 @@ var authorization = function(req, res, next) {
   }
 };
 
-app.get('/user', authorization, function(req, res) {
+app.get('/security/account', authorization, function(req, res) {
+  console.log("recheck");
   res.json({
-    id: 1,
-    user: {
-      id: 76,
-      role: "*"
-    }
+    "id": 76,
+    "pid": "533",
+    "barCode": "0003369000",
+    "firstName": "Ľubomír",
+    "lastName": "Repiský",
+    "relation": "*", // EMPLOYEE
+    "longName": "Ľubomír Repiský"
+  });
+});
+
+app.get('/authenticate', authorization, function(req, res) {
+  res.json({
+    "id": 76,
+    "pid": "533",
+    "barCode": "0003369000",
+    "firstName": "Ľubomír",
+    "lastName": "Repiský",
+    "relation": "*", // EMPLOYEE
+    "longName": "Ľubomír Repiský"
   });
 });
 

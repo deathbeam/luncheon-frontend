@@ -53,7 +53,8 @@ luncheon.run ( $rootScope
     # prevent it
     if next.originalPath == "/login" && AuthService.isAuthenticated()
       event.preventDefault()
-      NotifyService.warning "Už ste prihlásený."
+      NotifyService.warning "Už ste prihlásení." unless $rootScope
+        .loadingAccount
     # If we are trying to access page where login is required and we are not
     # logged in, prevent it
     else if next.loginRequired
@@ -71,9 +72,17 @@ luncheon.run ( $rootScope
   
   # Call when the the login is confirmed
   $rootScope.$on AUTH_EVENTS.loginConfirmed, (event, data) ->
-    NotifyService.success "Boli ste úspešne prihlásení."
+    nextLocation = if $rootScope.requestedUrl
+      $rootScope.requestedUrl
+    else "/user"
+
+    NotifyService.success "Boli ste úspešne prihlásení." unless $rootScope
+      .loadingAccount
+    
+    $rootScope.loadingAccount = false
+    $rootScope.requestedUrl = null
     SessionService.create data
-    $location.path('/user').replace()
+    $location.path(nextLocation).replace()
   
   # Call when the the login failed
   $rootScope.$on AUTH_EVENTS.loginFailed, (event, error) ->
@@ -85,8 +94,12 @@ luncheon.run ( $rootScope
   
   # Call when someone tried to access page where login is required
   $rootScope.$on AUTH_EVENTS.loginRequired, (event, error) ->
-    NotifyService.danger "Na prístup musíte byť prihlásený."
-    $location.path('/login')
+    if $rootScope.loadingAccount && (error && error.status != 401 || true)
+      $rootScope.requestedUrl = $location.path()
+    else
+      $rootScope.loadingAccount = false
+      NotifyService.danger "Na prístup musíte byť prihlásený."
+      $location.path('/login')
   
   # Call when we do not have permissions to do what we want to do
   $rootScope.$on AUTH_EVENTS.forbidden, (event, error) ->
@@ -98,3 +111,6 @@ luncheon.run ( $rootScope
     NotifyService.info "Boli ste odhlásení."
     SessionService.invalidate()
     $location.path('/login')
+
+  # Get already authenticated user account
+  AuthService.getAccount() unless AuthService.isAuthenticated()

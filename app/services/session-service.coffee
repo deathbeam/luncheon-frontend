@@ -2,12 +2,20 @@
 luncheon.service "SessionService", ->
   @create = (data) ->
     @id = data.id
-    @userId = data.user.id
-    @userRole = data.user.role
+    @pid = data.pid
+    @barCode = data.barCode
+    @firstName = data.firstName
+    @lastName = data.lastName
+    @userRole = data.relation
+    @longName = data.longName
 
   @invalidate = ->
     @id = null
-    @userId = null
+    @pid = null
+    @barCode = null
+    @firstName = null
+    @lastName = null
     @userRole = null
+    @longName = null
 
   @

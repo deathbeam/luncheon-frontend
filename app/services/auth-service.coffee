@@ -7,7 +7,7 @@ luncheon.service "AuthService", ( $rootScope
 , BASE_URL
 ) ->
   @isAuthenticated = () ->
-    !!SessionService.userId
+    !!SessionService.id
   
   @isAuthorized = (authorizedRoles) ->
     authorizedRoles = [authorizedRoles] unless angular.isArray authorizedRoles
@@ -15,7 +15,13 @@ luncheon.service "AuthService", ( $rootScope
       authorizedRoles.indexOf(USER_ROLES.all) != -1 ||
       authorizedRoles.indexOf(SessionService.userRole) != -1)
   
-  @login = (credentials) ->
+  @getAccount = () ->
+    $rootScope.loadingAccount = true
+    $http.get("#{BASE_URL}/security/account")
+      .then (response) ->
+        authService.loginConfirmed(response.data) if response.data.id
+
+  @login = (credentials, check) ->
     credentials = credentials || {}
 
     # Create Base64 encrypted header from credentials
@@ -30,7 +36,7 @@ luncheon.service "AuthService", ( $rootScope
     
     # Send our login request to REST service
     $http
-      .get("#{BASE_URL}/user",
+      .get("#{BASE_URL}/authenticate",
         { headers : headers },
         { config: ignoreAuthModule: true })
       .then onSuccess, onFailure
