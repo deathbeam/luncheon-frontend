@@ -1,43 +1,10 @@
 # Create our User controller
 luncheon.controller "UserController", ($scope, $http, NotifyService, AuthService, OrderService, CONFIG) ->
-  # Split orders to soups and meals and sort them
-  transformOrders = (orders) ->
-    transformed = new Map()
-
-    divide = (order, l) ->
-      order.ordered = order.ordered || l.ordered
-      order.changeable = order.changeable && l.changeable
-
-      switch l.lunch.soup
-        when true 
-          order.soups.push l
-          order.selectedSoup = l if l.ordered
-        when false
-          order.meals.push l
-          order.selectedMeal = l if l.ordered
-
-    add = (l) ->
-      key = l.lunch.date.toDate().yyyymmdd()
-
-      unless transformed.has key
-        transformed.set key,
-          ordered: false
-          changeable: true
-          date: l.lunch.date.toDate()
-          soups: []
-          meals: []
-
-      divide transformed.get(key), l
-
-    orders.forEach (l) -> add(l)
-    Array.from(transformed.values()).sort (a, b) -> 
-        a.date - b.date
-
   # Load lunches
   now = new Date()
   OrderService.forDate(now).then (
     (response) ->
-      $scope.orders = transformOrders response
+      $scope.orders = response
     ), (
     (error) ->
       NotifyService.danger "Objednávku #{now.toId()} sa nepodarilo načítať (chyba #{error.status})."

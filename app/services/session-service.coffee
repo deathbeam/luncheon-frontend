@@ -1,9 +1,9 @@
 # Manages logged in user session
 luncheon.service "SessionService", ->
-  @create = (sessionId, userId, userRole) ->
-    @id = sessionId
-    @userId = userId
-    @userRole = userRole
+  @create = (data) ->
+    @id = data.id
+    @userId = data.user.id
+    @userRole = data.user.role
 
   @invalidate = ->
     @id = null
