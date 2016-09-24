@@ -70,15 +70,15 @@ luncheon.service "OrderService", ($http, $q, SessionService, BASE_URL) ->
     order.meals.forEach (meal) ->
       orders.push
         user: order.user
-        lunch: meal.lunch.id
-        ordered: order.selectedMeal && meal.id == order.selectedMeal.id
+        lunch: meal.id
+        ordered: order.selectedMeal && meal.id == order.selectedMeal.id || false
         changeable: order.changeable
     
     order.soups.forEach (soup) ->
       orders.push
         user: order.user
-        lunch: soup.lunch.id
-        ordered: order.selectedSoup && soup.id == order.selectedSoup.id
+        lunch: soup.id
+        ordered: order.selectedSoup && soup.id == order.selectedSoup.id || false
         changeable: order.changeable
 
     $http.post("#{BASE_URL}/orders/orders", orders)

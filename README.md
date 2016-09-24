@@ -25,4 +25,6 @@ To run local REST API emulation, run this:
 node rest.js
 ```
 
-This will start REST server at `http://localhost:3000`. Login username is `admin` and password is `admin`.
+This will start REST server at `http://localhost:3000`. Login username is `admin` and password is `admin`. 
+Our server will generate some random data, so do not be terrified by lunches with names like `name animal beyond window officer bicycle throughout however` :smile:. 
+POST modifications of data is not implemented in out REST emulator (I am too lazy for this), so it will just handle routes and log POST body to console.
