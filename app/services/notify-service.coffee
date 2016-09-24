@@ -8,10 +8,15 @@ luncheon.service "NotifyService", ->
     
     $("#messages").append """
       <div id="alert-#{self.counter}"
-          class="alert alert-#{type} alert-dismissible"
-          role="alert"
-          style="display: none">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+           class="alert alert-#{type} alert-dismissible"
+           role="alert"
+           style="display: none">
+        <button type="button"
+                class="close"
+                data-dismiss="alert"
+                aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
         #{text}
       </div>
     """

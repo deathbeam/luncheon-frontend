@@ -17,7 +17,15 @@ Date::toId = ->
   [@getFullYear(), mm, dd].join('')
 
 # Create main Angular module
-luncheon = window.luncheon = angular.module "luncheon", [ "ngRoute", "ngLoadingSpinner", "ui.bootstrap", "http-auth-interceptor" ]
+luncheon = window.luncheon = angular.module "luncheon", [
+  "ngRoute",
+  "ngLoadingSpinner",
+  "ui.bootstrap",
+  "http-auth-interceptor"
+]
+
+# Base URL for rest calls
+luncheon.constant 'BASE_URL', 'http://localhost:3000'
 
 # Authorization events
 luncheon.constant 'AUTH_EVENTS',
@@ -33,27 +41,21 @@ luncheon.constant 'USER_ROLES',
   admin: 'admin'
   user: 'user'
 
-luncheon.constant 'CONFIG',
-  ###
-  When set to true, app will try to load dummy data and ignore errors
-  during rest calls
-  ###
-  mockRest: true
-
-  ###
-  Username and password to use for loggining in when we are mocking rest
-  ###
-  mockUsername: "admin"
-  mockPassword: "admin"
-
-luncheon.run ($rootScope, $location, NotifyService, AuthService, SessionService, CONFIG, AUTH_EVENTS) ->
+luncheon.run ( $rootScope
+, $location
+, NotifyService
+, AuthService
+, SessionService
+, AUTH_EVENTS) ->
   # Prevent changing routes if not allowed to
   $rootScope.$on '$routeChangeStart', (event, next) ->
-    # If we are trying to go back to login page and we are already logged in, prevent it
+    # If we are trying to go back to login page and we are already logged in,
+    # prevent it
     if next.originalPath == "/login" && AuthService.isAuthenticated()
       event.preventDefault()
       NotifyService.warning "Už ste prihlásený."
-    # If we are trying to access page where login is required and we are not logged in, prevent it
+    # If we are trying to access page where login is required and we are not
+    # logged in, prevent it
     else if next.loginRequired
       unless AuthService.isAuthorized(next.authorizedRoles)
         if AuthService.isAuthenticated()
@@ -75,7 +77,9 @@ luncheon.run ($rootScope, $location, NotifyService, AuthService, SessionService,
   
   # Call when the the login failed
   $rootScope.$on AUTH_EVENTS.loginFailed, (event, error) ->
-    NotifyService.danger "Prihlásenie sa nepodarilo (#{error.status} #{error.statusText})."
+    NotifyService.danger "Prihlásenie sa nepodarilo
+      (#{error.status} #{error.statusText})."
+    
     SessionService.invalidate()
     $location.path('/login').replace()
   

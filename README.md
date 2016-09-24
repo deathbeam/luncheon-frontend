@@ -17,4 +17,12 @@ bower install
 grunt serve
 ```
 
-Now open `http://localhost:9000` and.. voila! When in `mockRest` mode, username is `admin` and password is `admin`.
+Above will install or update all dependencies and start client at `http://localhost:9000`.
+
+To run local REST API emulation, run this:
+
+```
+node rest.js
+```
+
+This will start REST server at `http://localhost:3000`. Login username is `admin` and password is `admin`.

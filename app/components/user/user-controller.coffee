@@ -1,14 +1,16 @@
 # Create our User controller
-luncheon.controller "UserController", ($scope, $http, NotifyService, AuthService, OrderService, CONFIG) ->
+luncheon.controller "UserController", ( $scope
+, NotifyService
+, AuthService
+, OrderService) ->
   # Load lunches
   now = new Date()
-  OrderService.forDate(now).then (
-    (response) ->
-      $scope.orders = response
-    ), (
-    (error) ->
-      NotifyService.danger "Objednávku #{now.toId()} sa nepodarilo načítať (chyba #{error.status})."
-    )
+  onFulfilled = (response) -> $scope.orders = response
+  onRejected = (error) ->
+    NotifyService.danger "Objednávku #{now.toId()} sa nepodarilo načítať
+      (chyba #{error.status})."
+  
+  OrderService.forDate(now).then onFulfilled, onRejected
 
   # List of months in their string representation
   $scope.months = [
@@ -22,18 +24,20 @@ luncheon.controller "UserController", ($scope, $http, NotifyService, AuthService
   # Function that will order the lunch
   $scope.makeOrder = (order) ->
     unless order.selectedMeal
-      NotifyService.warning "Objednávku #{order.date.toId()} sa nepodarilo spracovať (prosím vyberte aspoň jedno hlavné jedlo)."
+      NotifyService.warning "Objednávku #{order.date.toId()} sa nepodarilo
+        spracovať (prosím vyberte aspoň jedno hlavné jedlo)."
       return
 
-    OrderService.save(order).then (
-      (response) ->
-        order.ordered = true
-        NotifyService.success "Objednávka #{order.date.toId()} bola úspešne spracovaná."
-      ), (
-      (error) ->
-        order.ordered = true if CONFIG.mockRest
-        NotifyService.danger "Objednávku #{order.date.toId()} sa nepodarilo spracovať (chyba #{error.status} #{error.statusText})."
-      )
+    onFulfilled = (response) ->
+      order.ordered = true
+      NotifyService.success "Objednávka #{order.date.toId()} bola úspešne
+        spracovaná."
+    
+    onRejected = (error) ->
+      NotifyService.danger "Objednávku #{order.date.toId()} sa nepodarilo
+        spracovať (chyba #{error.status} #{error.statusText})."
+
+    OrderService.save(order).then onFulfilled, onRejected
   
   # Function that cancel order of the lunch
   $scope.cancelOrder = (order) ->
@@ -42,19 +46,15 @@ luncheon.controller "UserController", ($scope, $http, NotifyService, AuthService
     data.selectedMeal = null
     data.selectedSoup = null
 
-    OrderService.save(data).then (
-      (response) ->
-        order.ordered = data.ordered
-        order.selectedMeal = data.selectedMeal
-        order.selectedSoup = data.selectedSoup
-        NotifyService.success "Objednávka #{order.date.toId()} bola úspešne zrušená."
-      ), (
-      (error) ->
-        if CONFIG.mockRest
-          order.ordered = data.ordered
-          order.selectedMeal = data.selectedMeal
-          order.selectedSoup = data.selectedSoup
-        
-        NotifyService.danger "Objednávku #{order.date.toId()} sa nepodarilo zrušiť (chyba #{error.status} #{error.statusText})."
-      )
+    onFulfilled = (response) ->
+      order.ordered = data.ordered
+      order.selectedMeal = data.selectedMeal
+      order.selectedSoup = data.selectedSoup
+      NotifyService.success "Objednávka #{order.date.toId()} bola úspešne
+        zrušená."
     
+    onRejected = (error) ->
+      NotifyService.danger "Objednávku #{order.date.toId()} sa nepodarilo
+        zrušiť (chyba #{error.status} #{error.statusText})."
+
+    OrderService.save(data).then onFulfilled, onRejected

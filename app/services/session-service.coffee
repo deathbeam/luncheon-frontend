@@ -10,4 +10,4 @@ luncheon.service "SessionService", ->
     @userId = null
     @userRole = null
 
-  @ 
+  @

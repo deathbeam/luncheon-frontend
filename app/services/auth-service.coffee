@@ -1,14 +1,12 @@
-luncheon.service "AuthService", ($rootScope, $http, authService, SessionService, CONFIG, USER_ROLES, AUTH_EVENTS) ->
-  # Mock user
-  mockUser = {
-    id: 1,
-    user: {
-      id: 1,
-      role: USER_ROLES.admin
-    }
-  }
-
-  @isAuthenticated = () -> 
+luncheon.service "AuthService", ( $rootScope
+, $http
+, authService
+, SessionService
+, USER_ROLES
+, AUTH_EVENTS
+, BASE_URL
+) ->
+  @isAuthenticated = () ->
     !!SessionService.userId
   
   @isAuthorized = (authorizedRoles) ->
@@ -21,22 +19,25 @@ luncheon.service "AuthService", ($rootScope, $http, authService, SessionService,
     credentials = credentials || {}
 
     # Create Base64 encrypted header from credentials
-    headers = authorization: "Basic " + btoa("#{credentials.username}:#{credentials.password}")
+    headers = authorization: "Basic " +
+      btoa("#{credentials.username}:#{credentials.password}")
 
     onSuccess = (response) ->
-      if !!response.data.id
-        authService.loginConfirmed response.data
+      authService.loginConfirmed response.data if response.data.id
     
     onFailure = (error) ->
-      if CONFIG.mockRest && credentials.username == CONFIG.mockUsername && credentials.password == CONFIG.mockPassword
-        authService.loginConfirmed mockUser
-      else
-        $rootScope.$broadcast AUTH_EVENTS.loginFailed, error
+      $rootScope.$broadcast AUTH_EVENTS.loginFailed, error
     
     # Send our login request to REST service
-    $http.get('user', headers : headers, config: ignoreAuthModule: true).then onSuccess, onFailure
+    $http
+      .get("#{BASE_URL}/user",
+        { headers : headers },
+        { config: ignoreAuthModule: true })
+      .then onSuccess, onFailure
   
   @logout = ->
-    $http.post('logout', {}).finally -> authService.loginCancelled()
+    $http
+      .post("#{BASE_URL}/logout", {})
+      .finally -> authService.loginCancelled()
 
   @

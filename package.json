@@ -1,15 +1,21 @@
 {
-	"name": "luncheon-frontend",
-	"description": "",
-	"version": "0.0.0",
-	"private": true,
-	"devDependencies": {
-		"grunt": "",
-        "bower": "",
-		"grunt-contrib-less": "",
-		"grunt-contrib-coffee": "",
-        "grunt-contrib-copy": "",
-		"grunt-contrib-watch": "",
-		"grunt-contrib-connect": ""
-	}
+  "name": "luncheon-frontend",
+  "description": "",
+  "version": "0.0.0",
+  "private": true,
+  "devDependencies": {
+    "grunt": "",
+    "bower": "",
+    "grunt-contrib-less": "",
+    "grunt-contrib-coffee": "",
+    "grunt-contrib-copy": "",
+    "grunt-contrib-watch": "",
+    "grunt-contrib-connect": "",
+    "express": "^4.14.0",
+    "express-rest": "^1.0.4",
+    "random-words": "0.0.1"
+  },
+  "dependencies": {
+    "auth-header": "^0.3.1"
+  }
 }

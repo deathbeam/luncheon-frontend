@@ -17,14 +17,14 @@
                         <label class="control-label"><i class="fa fa-fw fa-cutlery"></i> Hlavné jedlo</label>
                         <div class="list-group">
                             <a class="list-group-item" ng-disabled="!order.changeable" ng-repeat="item in order.meals" ng-model="order.selectedMeal" uib-btn-radio="item" uncheckable>
-                                {{ item.lunch.description }}
+                                {{ item.description }}
                             </a>
                         </div>
 
                         <label class="control-label"><i class="fa fa-fw fa-spoon"></i> Polievka</label>
                         <div class="list-group">
                             <a class="list-group-item" ng-disabled="!order.changeable" ng-repeat="item in order.soups" ng-model="order.selectedSoup" uib-btn-radio="item" uncheckable>
-                                {{ item.lunch.description }}
+                                {{ item.description }}
                             </a>
                         </div>
                     </div>
