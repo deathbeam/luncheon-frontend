@@ -25,6 +25,7 @@
     "angular-route": "",
     "angular-http-auth": "",
     "angular-bootstrap": "",
-    "angular-loading-spinner": ""
+    "angular-loading-spinner": "",
+    "angular-cookies": ""
   }
 }

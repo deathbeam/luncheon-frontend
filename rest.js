@@ -3,11 +3,12 @@ var randomWords = require('random-words');
 var authHeader = require('auth-header');
 var bodyParser = require('body-parser');
 
+var app = express();
 var allowedUsername = "admin";
 var allowedPassword = "admin";
 var loggedIn = false;
 
-// CORS middleware
+// Middleware that will allow us to actually do something
 var allowCrossDomain = function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
@@ -15,54 +16,7 @@ var allowCrossDomain = function(req, res, next) {
   next();
 }
 
-var app = express();
-app.use(allowCrossDomain);
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-app.use(bodyParser.json());
-
-function parseDate(date) {
-  return [
-    date.substring(0, 4), // Year
-    date.substring(5, 6), // Month
-    date.substring(6, 7) // Day
-  ];
-}
-
-// Function for generating sane random lunches
-var BASE_LUNCH = 3000;
-var lastRequestedDate = [0, 0, 0];
-var lastDayNum = 0;
-
-function generateLunch(id) {
-  var isSoup = false
-  var description = randomWords({
-    min: 3,
-    max: 15,
-    join: ' '
-  });
-
-  var lunchBaseId = id - BASE_LUNCH;
-  var lunchNum = lunchBaseId % 7;
-  var dayNum = Math.floor(lunchBaseId / 7);
-
-  // First 2 lunches are always soups
-  if (lunchNum <= 1) {
-    isSoup = true;
-  }
-
-  var date = lastRequestedDate.slice();
-  date[2] = date[2] + dayNum;
-
-  return {
-    "id": id,
-    "soup": isSoup,
-    "date": date,
-    "description": description
-  };
-}
-
+// Authorization middleware
 var authorization = function(req, res, next) {
   // Something messed up. 
   function fail() {
@@ -98,6 +52,7 @@ var authorization = function(req, res, next) {
 
   // Verify authentication. 
   if (auth[0] == allowedUsername && auth[1] == allowedPassword) {
+    // Preserve our session in very lazy and ugly way
     loggedIn = true;
     next();
   } else {
@@ -105,7 +60,48 @@ var authorization = function(req, res, next) {
   }
 };
 
+app.use(allowCrossDomain);
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
+
+// Parse date string from REST to year, month, day array
+function parseDate(date) {
+  return [
+    date.substring(0, 4), // Year
+    date.substring(5, 6), // Month
+    date.substring(6, 7)  // Day
+  ];
+}
+
+// Function for generating sane random lunches
+var BASE_LUNCH = 3000;
+var lastRequestedDate = [0, 0, 0];
+var lastDayNum = 0;
+
+function generateLunch(id) {
+  var lunchBaseId = id - BASE_LUNCH;
+  var lunchNum = lunchBaseId % 7; // Reset lunch number after 7 entries (2 soups, 5 meals)
+  var dayNum = Math.floor(lunchBaseId / 7); // Increase day number after 7 entries
+  var date = lastRequestedDate.slice();
+  date[2] = date[2] + dayNum;
+
+  return {
+    "id": id,
+    "soup": lunchNum <= 1, // First 2 lunches are always soups
+    "date": date,
+    "description": randomWords({
+      min: 3,
+      max: 15,
+      join: ' '
+    })
+  };
+}
+
 app.get('/security/account', authorization, function(req, res) {
+  console.log("GET /security/account");
+
   res.json({
     "id": 76,
     "pid": "533",
@@ -118,6 +114,9 @@ app.get('/security/account', authorization, function(req, res) {
 });
 
 app.get('/authenticate', authorization, function(req, res) {
+  console.log("GET /authenticate");
+  console.log(req.get('authorization'));
+
   res.json({
     "id": 76,
     "pid": "533",
@@ -130,6 +129,8 @@ app.get('/authenticate', authorization, function(req, res) {
 });
 
 app.post('/logout', authorization, function(req, res) {
+  console.log("GET /logout");
+  // "Destroy" our session in very lazy and ugly way
   loggedIn = false;
 
   res.json({
@@ -147,12 +148,14 @@ app.post('/orders/orders', authorization, function(req, res) {
 });
 
 app.get('/lunches/id/:id', authorization, function(req, res) {
+  console.log("GET /lunches/id/" + req.params.id);
   res.json(generateLunch(req.params.id));
 });
 
 app.get('/orders/date/:date/user/:user', authorization, function(req, res) {
   var user = req.params.user;
   lastRequestedDate = parseDate(req.params.date);
+  console.log("GET /orders/date/" + req.params.date + "/user/" + user);
 
   res.json([{
     "user": user,
@@ -507,5 +510,6 @@ app.get('/orders/date/:date/user/:user', authorization, function(req, res) {
   }]);
 });
 
+// Start our application
 console.log("Server started");
 app.listen(3000);

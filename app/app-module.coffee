@@ -19,6 +19,7 @@ Date::toId = ->
 # Create main Angular module
 luncheon = window.luncheon = angular.module "luncheon", [
   "ngRoute",
+  "ngCookies",
   "ngLoadingSpinner",
   "ui.bootstrap",
   "http-auth-interceptor"
@@ -58,6 +59,7 @@ luncheon.run ( $rootScope
     # logged in, prevent it
     else if next.loginRequired
       unless AuthService.isAuthorized(next.authorizedRoles)
+        event.preventDefault()
         if AuthService.isAuthenticated()
           $rootScope.$broadcast AUTH_EVENTS.forbidden
         else
@@ -71,37 +73,24 @@ luncheon.run ( $rootScope
   
   # Call when the the login is confirmed
   $rootScope.$on AUTH_EVENTS.loginConfirmed, (event, data) ->
-    nextLocation = if $rootScope.requestedUrl
-      $rootScope.requestedUrl
-    else "/user"
-
-    $rootScope.loadingAccount = false
-    $rootScope.requestedUrl = null
     NotifyService.success "Boli ste úspešne prihlásení."
     SessionService.create data
-    $location.path(nextLocation).replace()
+    $location.path("/user").replace()
   
   # Call when the the login failed
   $rootScope.$on AUTH_EVENTS.loginFailed, (event, error) ->
     NotifyService.danger "Prihlásenie sa nepodarilo
       (#{error.status} #{error.statusText})."
     
-    $rootScope.loadingAccount = false
-    $rootScope.requestedUrl = null
     SessionService.invalidate()
     $location.path('/login')
   
   # Call when someone tried to access page where login is required
   $rootScope.$on AUTH_EVENTS.loginRequired, (event, error) ->
-    if $rootScope.loadingAccount && (!error || (error.status != 401))
-      $rootScope.requestedUrl = $location.path()
-      $location.path('/loading').replace()
-    else
-      NotifyService.danger "Na prístup musíte byť prihlásení."
-      $rootScope.loadingAccount = false
-      SessionService.invalidate()
-      
-      $location.path('/login')
+    NotifyService.danger "Na prístup musíte byť prihlásení."
+    SessionService.invalidate()
+    
+    $location.path('/login')
   
   # Call when we do not have permissions to do what we want to do
   $rootScope.$on AUTH_EVENTS.forbidden, (event, error) ->
@@ -113,6 +102,3 @@ luncheon.run ( $rootScope
     NotifyService.info "Boli ste odhlásení."
     SessionService.invalidate()
     $location.path('/login')
-
-  # Get already authenticated user account
-  AuthService.getAccount() unless AuthService.isAuthenticated()
