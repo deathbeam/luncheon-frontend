@@ -1,5 +1,5 @@
 luncheon
-  .config ($routeProvider, $httpProvider, USER_ROLES) ->
+  .config ($routeProvider, $httpProvider, USER_ROLES, REDIRECTS) ->
     $routeProvider
       .when '/login',
         title: 'Prihlásenie'
@@ -13,7 +13,7 @@ luncheon
         loginRequired: true
         authorizedRoles: USER_ROLES.all
       .otherwise
-        redirectTo: '/login'
+        redirectTo: REDIRECTS.home
         authorizedRoles: USER_ROLES.all
     
     ###

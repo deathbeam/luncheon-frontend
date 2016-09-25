@@ -1,53 +1,53 @@
 <div class="row">
-    <div class="col-xs-12 col-sm-offset-1 col-sm-10">
-        <h1 class="heading">
-            Zoznam obedov
-            <small><a href="" ng-click="logout()">odhlásiť sa</a>
-        </h1>
-        <ul class="event-list">
-            <!-- Iterate over orderes and display each one as list element -->
-            <li ng-repeat="order in orders" ng-cloak>
-                <time datetime="{{ order.date.yyyymmdd() }}" ng-model="order.ordered" class="{{ order.ordered ? 'ordered' : '' }}">
-                    <span class="day">{{ order.date.getDate() }}</span>
-                    <span class="month">{{ months[order.date.getMonth()] }}</span>
-                    <span class="year">{{ order.date.getFullYear() }}</span>
-                </time>
-                <div class="info">
-                    <div class="desc">
-                        <label class="control-label"><i class="fa fa-fw fa-cutlery"></i> Hlavné jedlo</label>
-                        <div class="list-group">
-                            <a class="list-group-item" ng-disabled="!order.changeable" ng-repeat="item in order.meals" ng-model="order.selectedMeal" uib-btn-radio="item" uncheckable>
-                                {{ item.description }}
-                            </a>
-                        </div>
+  <div class="col-xs-12 col-sm-offset-1 col-sm-10">
+    <h1 class="heading">
+      Zoznam obedov
+      <small><a href="" ng-click="logout()">odhlásiť sa</a>
+    </h1>
+    <ul class="event-list">
+      <!-- Iterate over orderes and display each one as list element -->
+      <li ng-repeat="order in orders" ng-cloak>
+        <time datetime="{{ order.date.yyyymmdd() }}" ng-model="order.ordered" class="{{ order.ordered ? 'ordered' : '' }}">
+          <span class="day">{{ order.date.getDate() }}</span>
+          <span class="month">{{ months[order.date.getMonth()] }}</span>
+          <span class="year">{{ order.date.getFullYear() }}</span>
+        </time>
+        <div class="info">
+          <div class="desc">
+            <label class="control-label"><i class="fa fa-fw fa-cutlery"></i> Hlavné jedlo</label>
+            <div class="list-group">
+              <a class="list-group-item" ng-disabled="!order.changeable" ng-repeat="item in order.meals" ng-model="order.selectedMeal" uib-btn-radio="item" uncheckable>
+                {{ item.description }}
+              </a>
+            </div>
 
-                        <label class="control-label"><i class="fa fa-fw fa-spoon"></i> Polievka</label>
-                        <div class="list-group">
-                            <a class="list-group-item" ng-disabled="!order.changeable" ng-repeat="item in order.soups" ng-model="order.selectedSoup" uib-btn-radio="item" uncheckable>
-                                {{ item.description }}
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="details">
-                    <ul>
-                        <li class="ordered" style="width: 33%" ng-model="order.ordered" ng-switch="order.ordered">
-                            <a href="" ng-switch-when="true" ng-disabled="!order.changeable" ng-click="order.changeable && cancelOrder(order)" uib-tooltip="Zrušiť objednávku'">
-                                <i class="fa fa-fw fa-check-square-o"></i>
-                            </a>
-                            <a href="" ng-switch-when="false" ng-disabled="!order.changeable" ng-click="order.changeable && makeOrder(order)" uib-tooltip="Objednať obed">
-                                <i class="fa fa-fw fa-square-o"></i>
-                            </a>
-                        </li>
-                        <li class="food-type" style="width:33%" ng-model="order.selectedMeal" ng-if="!!order.selectedMeal">
-                            <span class="fa fa-fw fa-cutlery" uib-tooltip="Hlavné jedlo"></span>
-                        </li>
-                        <li class="food-type" style="width:34%" ng-model="order.selectedSoup" ng-if="!!order.selectedSoup">
-                            <span class="fa fa-fw fa-spoon" uib-tooltip="Polievka"></span>
-                        </li>
-                    </ul>
-                </div>
+            <label class="control-label"><i class="fa fa-fw fa-spoon"></i> Polievka</label>
+            <div class="list-group">
+              <a class="list-group-item" ng-disabled="!order.changeable" ng-repeat="item in order.soups" ng-model="order.selectedSoup" uib-btn-radio="item" uncheckable>
+                {{ item.description }}
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="details">
+          <ul>
+            <li class="ordered" style="width: 33%" ng-model="order.ordered" ng-switch="order.ordered">
+              <a href="" ng-switch-when="true" ng-disabled="!order.changeable" ng-click="order.changeable && cancelOrder(order)" uib-tooltip="Zrušiť objednávku'">
+                <i class="fa fa-fw fa-check-square-o"></i>
+              </a>
+              <a href="" ng-switch-when="false" ng-disabled="!order.changeable" ng-click="order.changeable && makeOrder(order)" uib-tooltip="Objednať obed">
+                <i class="fa fa-fw fa-square-o"></i>
+              </a>
             </li>
-        </ul>
-    </div>
+            <li class="food-type" style="width:33%" ng-model="order.selectedMeal" ng-if="!!order.selectedMeal">
+              <span class="fa fa-fw fa-cutlery" uib-tooltip="Hlavné jedlo"></span>
+            </li>
+            <li class="food-type" style="width:34%" ng-model="order.selectedSoup" ng-if="!!order.selectedSoup">
+              <span class="fa fa-fw fa-spoon" uib-tooltip="Polievka"></span>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
 </div>
