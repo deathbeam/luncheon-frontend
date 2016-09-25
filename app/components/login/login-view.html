@@ -7,5 +7,7 @@
          oninput="this.setCustomValidity('')"
          ng-model="credentials.username">
   <input type="password" class="form-control" placeholder="Heslo (potrebné iba pri emaile)" ng-model="credentials.password">
-  <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="$location.path('/user')">Prihlásiť sa</button>
+  <button class="btn btn-lg btn-primary btn-block" type="submit" uib-tooltip="Prihlásiť sa">
+    <i class="fa fa-fw fa-sign-in"></i>
+  </button>
 </form>

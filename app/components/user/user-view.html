@@ -2,7 +2,10 @@
   <div class="col-xs-12 col-sm-offset-1 col-sm-10">
     <h1 class="heading">
       Zoznam obedov
-      <small><a href="" ng-click="logout()">odhlásiť sa</a>
+      <small>
+        {{ username() }}
+        <a ng-click="logout()" uib-tooltip="Odhlásiť sa"><i class="fa fa-fw fa-sign-out"></i></a>
+      </small>
     </h1>
     <ul class="event-list">
       <!-- Iterate over orderes and display each one as list element -->

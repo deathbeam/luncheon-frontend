@@ -2,7 +2,8 @@
 luncheon.controller "UserController", ( $scope
 , NotifyService
 , AuthService
-, OrderService) ->
+, OrderService
+, SessionService) ->
   # Load lunches
   now = new Date()
   onFulfilled = (response) -> $scope.orders = response
@@ -18,6 +19,9 @@ luncheon.controller "UserController", ( $scope
     "Júl", "Aug", "Sep", "Okt", "Nov", "Dec"
     ]
   
+  # We want to show user name right?
+  $scope.username = -> SessionService.get().longName
+
   # Bind logout function to current scope
   $scope.logout = -> AuthService.logout()
 
