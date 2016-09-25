@@ -32,6 +32,9 @@ luncheon.constant 'BASE_URL', 'http://localhost:3000'
 luncheon.constant 'REDIRECTS',
   home: '/user'
   login: '/login'
+  errNotFound: '/error/404'
+  errForbidden: '/error/403'
+  errOther: '/error/500'
 
 # Authorization events
 luncheon.constant 'AUTH_EVENTS',
@@ -104,7 +107,7 @@ luncheon.run ( $rootScope
   # Call when we do not have permissions to do what we want to do
   $rootScope.$on AUTH_EVENTS.forbidden, (event, error) ->
     NotifyService.danger "Na prístup nemáte povolenie."
-    $location.path REDIRECTS.home
+    $location.path(REDIRECTS.errForbidden).replace()
 
   # Call when we logged out
   $rootScope.$on AUTH_EVENTS.loginCancelled, (event, data) ->

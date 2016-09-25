@@ -19,14 +19,21 @@ luncheon.service "AuthService", ( $rootScope
     !!SessionService.get().id
   
   @isAuthorized = (authorizedRoles) ->
+    authorizedRoles = [] unless authorizedRoles
     authorizedRoles = [authorizedRoles] unless angular.isArray authorizedRoles
-    @isAuthenticated() && (
-      authorizedRoles.indexOf(USER_ROLES.all) != -1 ||
-      authorizedRoles.indexOf(SessionService.get().relation) != -1)
-  
-  @getAccount = () ->
-    $http.get("#{BASE_URL}/security/account")
-      .then onLoginFulfilled, onLoginRejected
+    isAuthenticated = @isAuthenticated()
+    return isAuthenticated unless isAuthenticated
+
+    userRoles = SessionService.get().authorities.map (role) -> role.name
+    userRoles = [].concat.apply userRoles
+    isAuthorized = true
+
+    authorizedRoles.forEach (authorizedRole) ->
+      isAuthorized = isAuthenticated &&
+        (authorizedRole == USER_ROLES.all ||
+        userRoles.indexOf(authorizedRole) != -1)
+    
+    isAuthorized
 
   @login = (credentials, check) ->
     credentials = credentials || {}

@@ -1,6 +1,9 @@
 luncheon
   .config ($routeProvider, $httpProvider, USER_ROLES, REDIRECTS) ->
     $routeProvider
+      .when '/',
+        redirectTo: REDIRECTS.home
+        authorizedRoles: USER_ROLES.all
       .when '/login',
         title: 'Prihlásenie'
         templateUrl: 'app/components/login/login-view.html'
@@ -12,8 +15,13 @@ luncheon
         controller: 'UserController'
         loginRequired: true
         authorizedRoles: USER_ROLES.all
+      .when '/error/:code',
+        title: 'Chyba'
+        templateUrl: "app/components/error/error-view.html",
+        controller: "ErrorController"
+        authorizedRoles: USER_ROLES.all
       .otherwise
-        redirectTo: REDIRECTS.home
+        redirectTo: REDIRECTS.errNotFound
         authorizedRoles: USER_ROLES.all
     
     ###

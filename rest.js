@@ -71,7 +71,7 @@ function parseDate(date) {
   return [
     date.substring(0, 4), // Year
     date.substring(5, 6), // Month
-    date.substring(6, 7)  // Day
+    date.substring(6, 7) // Day
   ];
 }
 
@@ -99,20 +99,6 @@ function generateLunch(id) {
   };
 }
 
-app.get('/security/account', authorization, function(req, res) {
-  console.log("GET /security/account");
-
-  res.json({
-    "id": 76,
-    "pid": "533",
-    "barCode": "0003369000",
-    "firstName": "Ľubomír",
-    "lastName": "Repiský",
-    "relation": "*", // EMPLOYEE
-    "longName": "Ľubomír Repiský"
-  });
-});
-
 app.get('/authenticate', authorization, function(req, res) {
   console.log("GET /authenticate");
   console.log(req.get('authorization'));
@@ -123,8 +109,13 @@ app.get('/authenticate', authorization, function(req, res) {
     "barCode": "0003369000",
     "firstName": "Ľubomír",
     "lastName": "Repiský",
-    "relation": "*", // EMPLOYEE
-    "longName": "Ľubomír Repiský"
+    "relation": "EMPLOYEE",
+    "longName": "Ľubomír Repiský",
+    "authorities": [{
+      name: "user"
+    }, {
+      name: "admin"
+    }]
   });
 });
 
