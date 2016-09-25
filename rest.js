@@ -89,6 +89,10 @@ var authorization = function(req, res, next) {
     return fail();
   }
 
+  // Log authorization events
+  console.log("Authorization");
+  console.log(auth);
+
   // Get the basic auth component. 
   var auth = Buffer(auth.token, 'base64').toString().split(':', 2);
 
@@ -102,7 +106,6 @@ var authorization = function(req, res, next) {
 };
 
 app.get('/security/account', authorization, function(req, res) {
-  console.log("recheck");
   res.json({
     "id": 76,
     "pid": "533",

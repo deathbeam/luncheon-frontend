@@ -53,8 +53,7 @@ luncheon.run ( $rootScope
     # prevent it
     if next.originalPath == "/login" && AuthService.isAuthenticated()
       event.preventDefault()
-      NotifyService.warning "Už ste prihlásení." unless $rootScope
-        .loadingAccount
+      NotifyService.warning "Už ste prihlásení."
     # If we are trying to access page where login is required and we are not
     # logged in, prevent it
     else if next.loginRequired
@@ -76,11 +75,9 @@ luncheon.run ( $rootScope
       $rootScope.requestedUrl
     else "/user"
 
-    NotifyService.success "Boli ste úspešne prihlásení." unless $rootScope
-      .loadingAccount
-    
     $rootScope.loadingAccount = false
     $rootScope.requestedUrl = null
+    NotifyService.success "Boli ste úspešne prihlásení."
     SessionService.create data
     $location.path(nextLocation).replace()
   
@@ -89,22 +86,27 @@ luncheon.run ( $rootScope
     NotifyService.danger "Prihlásenie sa nepodarilo
       (#{error.status} #{error.statusText})."
     
+    $rootScope.loadingAccount = false
+    $rootScope.requestedUrl = null
     SessionService.invalidate()
-    $location.path('/login').replace()
+    $location.path('/login')
   
   # Call when someone tried to access page where login is required
   $rootScope.$on AUTH_EVENTS.loginRequired, (event, error) ->
-    if $rootScope.loadingAccount && (error && error.status != 401 || true)
+    if $rootScope.loadingAccount && (!error || (error.status != 401))
       $rootScope.requestedUrl = $location.path()
+      $location.path('/loading').replace()
     else
+      NotifyService.danger "Na prístup musíte byť prihlásení."
       $rootScope.loadingAccount = false
-      NotifyService.danger "Na prístup musíte byť prihlásený."
+      SessionService.invalidate()
+      
       $location.path('/login')
   
   # Call when we do not have permissions to do what we want to do
   $rootScope.$on AUTH_EVENTS.forbidden, (event, error) ->
     NotifyService.danger "Na prístup nemáte povolenie."
-    $location.path('/login').replace()
+    $location.path('/login')
 
   # Call when we logged out
   $rootScope.$on AUTH_EVENTS.loginCancelled, (event, data) ->

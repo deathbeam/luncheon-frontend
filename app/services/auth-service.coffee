@@ -17,9 +17,14 @@ luncheon.service "AuthService", ( $rootScope
   
   @getAccount = () ->
     $rootScope.loadingAccount = true
+    onSuccess = (response) ->
+      authService.loginConfirmed(response.data) if !!response.data.id
+    
+    onFailure = (error) ->
+      $rootScope.$broadcast AUTH_EVENTS.loginFailed, error
+
     $http.get("#{BASE_URL}/security/account")
-      .then (response) ->
-        authService.loginConfirmed(response.data) if response.data.id
+      .then onSuccess, onFailure
 
   @login = (credentials, check) ->
     credentials = credentials || {}
@@ -29,7 +34,7 @@ luncheon.service "AuthService", ( $rootScope
       btoa("#{credentials.username}:#{credentials.password}")
 
     onSuccess = (response) ->
-      authService.loginConfirmed response.data if response.data.id
+      authService.loginConfirmed response.data if !!response.data.id
     
     onFailure = (error) ->
       $rootScope.$broadcast AUTH_EVENTS.loginFailed, error
@@ -37,8 +42,7 @@ luncheon.service "AuthService", ( $rootScope
     # Send our login request to REST service
     $http
       .get("#{BASE_URL}/authenticate",
-        { headers : headers },
-        { config: ignoreAuthModule: true })
+        { headers : headers, config: ignoreAuthModule: true })
       .then onSuccess, onFailure
   
   @logout = ->

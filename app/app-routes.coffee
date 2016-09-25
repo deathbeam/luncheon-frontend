@@ -1,6 +1,10 @@
 luncheon
   .config ($routeProvider, $httpProvider, USER_ROLES) ->
     $routeProvider
+      .when '/loading',
+        title: 'Načítavam...'
+        templateUrl: 'app/components/login/loading-view.html'
+        authorizedRoles: USER_ROLES.all
       .when '/login',
         title: 'Prihlásenie'
         templateUrl: 'app/components/login/login-view.html'
