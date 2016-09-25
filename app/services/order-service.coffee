@@ -59,7 +59,7 @@ luncheon.service "OrderService", ($http, $q, SessionService, BASE_URL) ->
       $q.all(lunchPromises).then(onLunchesFulfilled, rejectResult)
 
     $http
-      .get("#{BASE_URL}/orders/date/#{date}/user/#{SessionService.getId()}")
+      .get("#{BASE_URL}/orders/date/#{date}/user/#{SessionService.get().id}")
       .then onOrderFulfilled, rejectResult
 
     defer.promise

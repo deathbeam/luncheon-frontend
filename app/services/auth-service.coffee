@@ -16,13 +16,13 @@ luncheon.service "AuthService", ( $rootScope
       onLoginRejected response
 
   @isAuthenticated = () ->
-    !!SessionService.getId()
+    !!SessionService.get().id
   
   @isAuthorized = (authorizedRoles) ->
     authorizedRoles = [authorizedRoles] unless angular.isArray authorizedRoles
     @isAuthenticated() && (
       authorizedRoles.indexOf(USER_ROLES.all) != -1 ||
-      authorizedRoles.indexOf(SessionService.getUserRole()) != -1)
+      authorizedRoles.indexOf(SessionService.get().relation) != -1)
   
   @getAccount = () ->
     $http.get("#{BASE_URL}/security/account")
@@ -38,7 +38,7 @@ luncheon.service "AuthService", ( $rootScope
     # Send our login request to REST service
     $http
       .get("#{BASE_URL}/authenticate",
-        { headers : headers, config: ignoreAuthModule: true })
+        { headers : headers, ignoreAuthModule: true })
       .then onLoginFulfilled, onLoginRejected
   
   @logout = ->
