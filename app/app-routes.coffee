@@ -5,18 +5,18 @@ luncheon
         redirectTo: REDIRECTS.home
         authorizedRoles: USER_ROLES.all
       .when '/login',
-        title: 'Prihlásenie'
+        title: 'LOGIN'
         templateUrl: 'app/components/login/login-view.html'
         controller: 'LoginController'
         authorizedRoles: USER_ROLES.all
       .when '/user',
-        title: 'Zoznam obedov'
+        title: 'USER'
         templateUrl: 'app/components/user/user-view.html'
         controller: 'UserController'
         loginRequired: true
         authorizedRoles: USER_ROLES.all
       .when '/error/:code',
-        title: 'Chyba'
+        title: 'ERROR'
         templateUrl: "app/components/error/error-view.html",
         controller: "ErrorController"
         authorizedRoles: USER_ROLES.all

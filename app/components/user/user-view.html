@@ -1,10 +1,10 @@
 <div class="row">
   <div class="col-xs-12 col-sm-offset-1 col-sm-10">
     <h1 class="heading">
-      {{ title }}
+      {{ title | translate }}
       <small>
         {{ username() }}
-        <a ng-click="logout()" uib-tooltip="Odhlásiť sa"><i class="fa fa-fw fa-sign-out"></i></a>
+        <a ng-click="logout()" uib-tooltip="{{ 'LOGOUT_TOOLTIP' | translate }}"><i class="fa fa-fw fa-sign-out"></i></a>
       </small>
     </h1>
     <ul class="event-list">
@@ -17,14 +17,14 @@
         </time>
         <div class="info">
           <div class="desc">
-            <label class="control-label"><i class="fa fa-fw fa-cutlery"></i> Hlavné jedlo</label>
+            <label class="control-label"><i class="fa fa-fw fa-cutlery"></i> {{ 'USER_MEAL' | translate }}</label>
             <div class="list-group">
               <a class="list-group-item" ng-disabled="!order.changeable" ng-repeat="item in order.meals" ng-model="order.selectedMeal" uib-btn-radio="item" uncheckable>
                 {{ item.description }}
               </a>
             </div>
 
-            <label class="control-label"><i class="fa fa-fw fa-spoon"></i> Polievka</label>
+            <label class="control-label"><i class="fa fa-fw fa-spoon"></i> {{ 'USER_SOUP' | translate }}</label>
             <div class="list-group">
               <a class="list-group-item" ng-disabled="!order.changeable" ng-repeat="item in order.soups" ng-model="order.selectedSoup" uib-btn-radio="item" uncheckable>
                 {{ item.description }}
@@ -35,18 +35,18 @@
         <div class="details">
           <ul>
             <li class="ordered" style="width: 33%" ng-model="order.ordered" ng-switch="order.ordered">
-              <a href="" ng-switch-when="true" ng-disabled="!order.changeable" ng-click="order.changeable && cancelOrder(order)" uib-tooltip="Zrušiť objednávku'">
+              <a href="" ng-switch-when="true" ng-disabled="!order.changeable" ng-click="order.changeable && cancelOrder(order)" uib-tooltip="{{ 'USER_CANCEL_ORDER' | translate }}">
                 <i class="fa fa-fw fa-check-square-o"></i>
               </a>
-              <a href="" ng-switch-when="false" ng-disabled="!order.changeable" ng-click="order.changeable && makeOrder(order)" uib-tooltip="Objednať obed">
+              <a href="" ng-switch-when="false" ng-disabled="!order.changeable" ng-click="order.changeable && makeOrder(order)" uib-tooltip="{{ 'USER_MAKE_ORDER' | translate }}">
                 <i class="fa fa-fw fa-square-o"></i>
               </a>
             </li>
             <li class="food-type" style="width:33%" ng-model="order.selectedMeal" ng-if="!!order.selectedMeal">
-              <span class="fa fa-fw fa-cutlery" uib-tooltip="Hlavné jedlo"></span>
+              <span class="fa fa-fw fa-cutlery" uib-tooltip="{{ 'USER_MEAL' | translate }}"></span>
             </li>
             <li class="food-type" style="width:34%" ng-model="order.selectedSoup" ng-if="!!order.selectedSoup">
-              <span class="fa fa-fw fa-spoon" uib-tooltip="Polievka"></span>
+              <span class="fa fa-fw fa-spoon" uib-tooltip="{{ 'USER_SOUP' | translate }}"></span>
             </li>
           </ul>
         </div>

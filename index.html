@@ -2,7 +2,7 @@
 <html ng-app="luncheon">
 
 <head>
-  <title ng-bind="title ? title + ' | Luncheon' : 'Načítavam...'">Načítavam...</title>
+  <title ng-bind="title ? (title | translate) + ' | ' + ('SITE' | translate) : ('LOADING' | translate)">Luncheon</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
   <meta name="author" content="">
@@ -32,7 +32,7 @@
   <span us-spinner="{ color: 'white' }" class="spinner"></span>
 
   <!-- Here, all our views will be loaded -->
-  <div class="container" ng-view></div>
+  <div ng-view class="container"></div>
 
   <!-- Load some Bower JavaScript libraries -->
   <!-- NOTE: Scripts must be loaded last, to prevent them from blocking page loading -->
@@ -45,6 +45,7 @@
   <script src="bower_components/angular/angular.min.js"></script>
   <script src="bower_components/angular-route/angular-route.min.js"></script>
   <script src="bower_components/angular-cookies/angular-cookies.min.js"></script>
+  <script src="bower_components/angular-translate/angular-translate.min.js"></script>
   <script src="bower_components/angular-http-auth/src/http-auth-interceptor.js"></script>
   <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
   <script src="bower_components/angular-spinner/angular-spinner.min.js"></script>
@@ -52,7 +53,9 @@
 
   <!-- Load our application -->
   <script src="app/app-module.js"></script>
+  <script src="app/app-run.js"></script>
   <script src="app/app-routes.js"></script>
+  <script src="app/app-translations.js"></script>
 
   <!-- Load services -->
   <script src="app/services/session-service.js"></script>

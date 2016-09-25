@@ -1,13 +1,9 @@
 <!-- Check if we are authenticated and redirect -->
 <form id="login-screen" class="block" method="POST" ng-submit="login()">
-  <h1 class="heading text-muted">Prihlásenie</h1>
-  <input type="text" class="form-control" required="" autofocus=""
-         placeholder="Email alebo čiarový kód"
-         oninvalid="this.setCustomValidity('Toto je povinné pole ktoré musíte vyplniť ak sa chcete prihlásiť.')"
-         oninput="this.setCustomValidity('')"
-         ng-model="credentials.username">
-  <input type="password" class="form-control" placeholder="Heslo (potrebné iba pri emaile)" ng-model="credentials.password">
-  <button class="btn btn-lg btn-primary btn-block" type="submit" uib-tooltip="Prihlásiť sa">
+  <h1 class="heading text-muted">{{ title | translate }}</h1>
+  <input type="text" class="form-control" required="" autofocus="" placeholder="{{ 'LOGIN_INPUT_USER' | translate }}" ng-model="credentials.username">
+  <input type="password" class="form-control" placeholder="{{ 'LOGIN_INPUT_PASS' | translate }}" ng-model="credentials.password">
+  <button class="btn btn-lg btn-primary btn-block" type="submit" uib-tooltip="{{ 'LOGIN_TOOLTIP' | translate }}">
     <i class="fa fa-fw fa-sign-in"></i>
   </button>
 </form>
